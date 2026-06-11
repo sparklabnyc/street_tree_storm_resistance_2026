@@ -20,7 +20,6 @@ As climate change leads to increased storm hazard severity, the health and struc
 
 1. 2025-2026 New York City Tree Census Map Data
 * The NYC Parks Department uses a combination of volunteer efforts and LiDAR/machine learning technology to collect data on the species, size, location, and ecological benefits of street and park trees in New York City.
-* [NYC Tree Map] (https://tree-map.nycgovparks.org/)
 
 2. NYC Parks Department Forestry Service Requests
 * Dataset of tree-related service requests submitted through 311 or Parks website. This dataset provides
