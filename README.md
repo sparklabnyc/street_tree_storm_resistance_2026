@@ -18,8 +18,6 @@ As climate change leads to increased storm hazard severity, the health and struc
 
 ### 1a_raw
 
-Raw input datasets:
-
 1. 2025-2026 New York City Tree Census Map Data
 * The NYC Parks Department uses a combination of volunteer efforts and LiDAR/machine learning technology to collect data on the species, size, location, and ecological benefits of street and park trees in New York City.
 * [NYC Tree Map] (https://tree-map.nycgovparks.org/)
@@ -31,10 +29,6 @@ Raw input datasets:
 * The NYC Hazard History and Consequence Tool, developed by NYC Emergency Management as part of the NYC Hazard Mitigation Plan, compiles hazard events in NYC. Filtered down to the hazards of flash flooding, coastal flooding, heavy snow, and high winds, this database will provide temporal information of storm events (e.g. heavy rainstorms, tropical cyclones, hurricanes, blizzards) in NYC that can cause damage to trees. 
 
 ### 1b_intermediate
-
-Processed/intermediate datasets:
-
-Processed/intermediate datasets:
 
 1. Filtered/cleaned Service Request Data
 * filter to SRCategory = Hazards, then clean SRType to the larger categories of Limb Down, Hanging Limb, Tree Down, and Tree Leaning
@@ -53,7 +47,6 @@ Supporting files:
 
 ### 1d_summary
 
-Final processed datasets:
 * processed list of trees damaged by storms from 2015 to 2025, with information about species, size, and location (coordinates and closest address)
 
 ---
