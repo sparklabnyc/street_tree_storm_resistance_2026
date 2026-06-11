@@ -1,4 +1,4 @@
-# Identification and Spatial Distribution of Storm-Resilient Stree Tree Species in New York City
+# Identification and Spatial Distribution of Storm-Resilient Street Tree Species in New York City
 
 **Authors:**
 Ann Zhao Dai, mentored by Dr. Robbie M. Parks and Dr. Anna Palmer, 2026
