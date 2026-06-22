@@ -18,35 +18,25 @@ As climate change leads to increased storm hazard severity, the health and struc
 
 ### 1a_raw
 
-1. 2025-2026 New York City Tree Census Map Data
-* The NYC Parks Department uses a combination of volunteer efforts and LiDAR/machine learning technology to collect data on the species, size, location, and ecological benefits of street and park trees in New York City.
+* 1a_servicerequest_data: processed data on service requests called into NYC Parks & Recreation Department
 
-2. NYC Parks Department Forestry Service Requests
-* Dataset of tree-related service requests submitted through 311 or Parks website. This dataset provides
+* 1a_treemap_data: processed street tree data from NYC Parks & Recreation Department
 
-3. NYC Storm History Data
-* The NYC Hazard History and Consequence Tool, developed by NYC Emergency Management as part of the NYC Hazard Mitigation Plan, compiles hazard events in NYC. Filtered down to the hazards of flash flooding, coastal flooding, heavy snow, and high winds, this database will provide temporal information of storm events (e.g. heavy rainstorms, tropical cyclones, hurricanes, blizzards) in NYC that can cause damage to trees. 
+* 1a_hazardhistory_data: processed dated storm data from NYC Emergency Management
 
 ### 1b_intermediate
 
-1. Filtered/cleaned Service Request Data
-* filter to SRCategory = Hazards, then clean SRType to the larger categories of Limb Down, Hanging Limb, Tree Down, and Tree Leaning
-
-2. Temporal Service Request Data
-* Further filter SR Data to requests made within 24 hours of a major storm event from 2016 to 2026, as compiled in 1a4
-
-3. Service requests & species
-* Join 1b2 with 1a1 (NYC Tree Map) using the closest address as key --> get full dataframe of trees with storm damage and their species
+* 1b_stormservicerequests_data: only service requests called in within 24 hours of a severe storm event
 
 ### 1c_support
 
-Supporting files:
+* 1c_citree_species_characteristics: characteristics of different urban tree species compiled in the Citree database (TU Dresden)
 
-* Boundaries, lookup tables, definitions, etc.
+* 1c_approved_street_trees: list of approved street trees for planting in New York City
 
 ### 1d_summary
 
-* processed list of trees damaged by storms from 2015 to 2025, with information about species, size, and location (coordinates and closest address)
+* 1d_servicedtrees_data: list of trees damaged after severe weather events in NYC, including species, size, and location
 
 ---
 
