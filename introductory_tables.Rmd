@@ -1,5 +1,105 @@
 ---
+---
+---
+
+---
+
 title: "introductory_tables"
 output: html_document
 ---
 
+```{r}
+library(ggplot2)
+```
+
+```{r}
+#frequency table of all street trees in NYC
+street_tree_counts <- tree_map %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+street_tree_counts$geometry <- NULL
+
+#cut to top 15
+top15_street_trees <- street_tree_counts %>%
+  slice_max(frequency, n = 15)
+```
+
+```{r}
+#cut to top 15
+top30_street_trees <- street_tree_counts %>%
+  slice_max(frequency, n = 30)
+```
+
+```{r}
+#frequency table of serviced trees
+serviced_tree_counts <- serviced_trees %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+serviced_tree_counts$geometry <- NULL
+
+#cut to top 15
+top30_serviced_trees <- serviced_tree_counts %>%
+  slice_max(frequency, n = 30)
+```
+
+```{r}
+#bar graph of top 15 street tree species
+top30_street_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+#bar graph of top 15 serviced trees
+top30_serviced_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+nyc_approved_trees <- read.csv("nyc_approved_trees.csv")
+```
+
+```{r}
+approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_trees, by = "species_scientific")
+```
+
+```{r}
+approved_tree_frequency %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+# Flag matches
+top30_street_trees <- top30_street_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+                             "Match", "No Match"))
+
+# Plot
+ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+top30_serviced_trees <- top30_street_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+                             "Match", "No Match"))
+
+# Plot
+ggplot(top30_serviced_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
