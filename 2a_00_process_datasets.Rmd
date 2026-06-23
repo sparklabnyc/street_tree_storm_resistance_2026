@@ -1,0 +1,15 @@
+---
+title: "2a_00_process_datasets"
+output: html_document
+---
+
+### Obtaining & Processing Raw Service Request, Tree Map, and Hazard History Data
+
+```{r}
+getwd(
+)
+```
+
+```{r}
+system("git check-ignore -v path/to/your/notebook.ipynb")
+```
