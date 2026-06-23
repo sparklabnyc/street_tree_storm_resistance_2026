@@ -1,0 +1,55 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+### Joining datasets
+
+#### 1. Join hazard history and service requests to get a list of requests made after a severe weather event
+
+```{r}
+library(fuzzyjoin)
+```
+
+```{r}
+#use fuzzyjoin to get all service requests within 24 hours of a storm (before and after)
+storm_service_requests <- difference_join(hazard_history, service_requests,
+                                          by = c("DateTime"),
+                                          max_dist = 86400,
+                                          distance_col = "diff")
+
+#restrict to only service requests after a storm starts
+storm_service_requests <- subset(storm_service_requests, DateTime.y >= DateTime.x)
+```
+
+```{r}
+#select relevant variables
+storm_service_requests <- storm_service_requests %>%
+  select("storm_event_id", "storm_date", "storm_name", "storm_issues", "tree_condition", "reported_tree_condition", "borough", "address", "location_details", "service_request_date", "geometry")
+```
+
+#### 2. Join storm service requests with tree map data to get species and size of each serviced tree
+
+```{r}
+#join by nearest feature - matches serviced tree locations (planting spaces) to the closest tree coordinates given in the tree map
+storm_service_requests <- st_as_sf(storm_service_requests)
+
+serviced_trees <- st_join(storm_service_requests, tree_map, join = st_nearest_feature)
+```
+
+```{r}
+#selecting and rearranging relevant columns
+serviced_trees <- serviced_trees %>%
+  select("tree_id", "stump_diameter", "species_common", "species_scientific", "borough", "closest_address", "geometry", "service_request_date", "storm_date", "storm_event_id", "storm_issues", "tree_condition")
+```
+
+```{r}
+#reformatting storm dates to include times
+serviced_trees$storm_date <- format(serviced_trees$storm_date, "%Y-%m-%d %H:%M:%S")
+```
+
+```{r}
+#save files
+write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALSE)
+write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
+```
