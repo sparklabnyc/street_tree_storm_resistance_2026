@@ -53,3 +53,8 @@ serviced_trees$storm_date <- format(serviced_trees$storm_date, "%Y-%m-%d %H:%M:%
 write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALSE)
 write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
 ```
+
+```{r}
+getwd()
+system("git rev-parse --show-toplevel")
+```
