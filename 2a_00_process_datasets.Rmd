@@ -6,10 +6,61 @@ output: html_document
 ### Obtaining & Processing Raw Service Request, Tree Map, and Hazard History Data
 
 ```{r}
-getwd(
-)
+library(readr) 
+library(tidyverse) 
+library(sf)
 ```
 
 ```{r}
-system("git check-ignore -v path/to/your/notebook.ipynb")
+#Load datasets
+servicerequests_raw <- read_csv("Forestry_Service_Requests_20260609.csv")
+treemap_raw <- read_csv("nyc_trees_all.csv")
+hazardhistory_raw<- read_csv("NYCStormHazards.csv")
+```
+
+#### Filter and clean service requests data
+
+```{r}
+#Filter and clean service requests data
+
+#remove entries with unknown locations and non street trees
+service_requests <- servicerequests_raw %>%
+  filter(SRResolution != "Inspected - Location Not Found") %>%
+  filter(is.na(ParkName))
+
+#Filter down to relevant variables
+service_requests <- service_requests %>%
+ select("SRType", "Descriptor1", "BoroughCode", "BuildingNumber", "StreetName", "LocationDetails", "Geometry", "InitiatedDate") %>%
+  drop_na(InitiatedDate)
+```
+
+```{r}
+#combining building number and street name
+service_requests <- service_requests %>%
+  unite("address", BuildingNumber, StreetName, sep = " ")
+
+#renaming variables
+service_requests <- service_requests %>%
+  rename(tree_condition = "SRType", reported_tree_condition = "Descriptor1", borough = "BoroughCode", location_details = "LocationDetails", coordinates = "Geometry", service_request_date = "InitiatedDate")
+```
+
+```{r}
+#reformatting date for joining later
+service_requests$service_request_date <- as.POSIXct(service_requests$service_request_date, format = "%Y %b %d %I:%M:%S %p")
+service_requests <- service_requests %>% 
+  mutate(DateTime = as.numeric(service_request_date))
+```
+
+```{r}
+#reformatting addresses
+service_requests$address <- gsub("\\bRD\\b", "ROAD", service_requests$address)
+service_requests$address <- gsub("\\bAV\\b", "AVENUE", service_requests$address)
+service_requests$address <- gsub("\\bAVE\\b", "AVENUE", service_requests$address)
+service_requests$address <- gsub("\\bPL\\b", "PLACE", service_requests$address)
+service_requests$address <- gsub("\\bST\\b", "STREET", service_requests$address)
+service_requests$address <- gsub("(?<=\\d)(ST|ND|RD|TH)\\b", "", service_requests$address, perl = TRUE)
+service_requests$address <- gsub("   ", " ", service_requests$address)
+service_requests$address <- gsub("  ", " ", service_requests$address)
+
+service_requests$address <- toupper(service_requests$address)
 ```
