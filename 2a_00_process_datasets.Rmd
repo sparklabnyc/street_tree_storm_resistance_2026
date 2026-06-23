@@ -64,3 +64,63 @@ service_requests$address <- gsub("  ", " ", service_requests$address)
 
 service_requests$address <- toupper(service_requests$address)
 ```
+
+```{r}
+#reformat coordinates for joining later
+service_requests$coordinates <- gsub("POINT", "", service_requests$coordinates)
+service_requests$coordinates <- gsub("[()]", "", service_requests$coordinates)
+```
+
+```{r}
+#convert to sf to st_join later
+service_requests <- service_requests %>%
+  mutate(coordinates = str_squish(coordinates)) %>% 
+  separate_wider_delim(
+    cols = coordinates, 
+    delim = " ", 
+    names = c("longitude", "latitude")) %>% 
+  mutate(across(c(longitude, latitude), as.numeric))
+
+service_requests <- st_as_sf(service_requests, coords = c("longitude", "latitude"), crs = 4326)
+```
+
+#### Filter and clean tree map data
+
+```{r}
+#filter down to needed rows
+tree_map <- treemap_raw %>%
+  filter(is_street_tree != "FALSE") %>%
+  filter(species_common != "Unknown") %>%
+    select("tree_id", "closest_address", "stump_diameter", "latitude", "longitude", "species_common", "species_scientific")
+```
+
+```{r}
+#reformat addresses
+tree_map$closest_address <- gsub("&#x20;", "", tree_map$closest_address)
+tree_map$closest_address <- gsub("Rd", "Road", tree_map$closest_address)
+tree_map$closest_address <- gsub("\\Av\\e?\\b", "Avenue", tree_map$closest_address)
+tree_map$closest_address <- gsub("\\Pl\\b", "Place", tree_map$closest_address)
+tree_map$closest_address <- gsub("\\bSt\\b", "Street", tree_map$closest_address)
+tree_map$closest_address <- gsub("\\bSt\\b", "Street", tree_map$closest_address)
+tree_map$closest_address <- gsub("(?<=\\d)(st|nd|rd|th)\\b", "", tree_map$closest_address, perl = TRUE)
+tree_map$closest_address <- gsub("Blvd", "Boulevard", tree_map$closest_address)
+
+tree_map$closest_address <- toupper(tree_map$closest_address)
+```
+
+```{r}
+#make species names sentence case for consistency
+library(stringr)
+tree_map$species_common <- str_to_sentence(tree_map$species_common)
+```
+
+```{r}
+#convert coordinates to sf for joining
+tree_map <- st_as_sf(tree_map, coords = c("longitude", "latitude"), crs = 4326)
+```
+
+```{r}
+#save files
+write.csv(hazard_history, "hazard_history.csv", row.names = FALSE)
+write.csv(service_requests, "service_requests.csv", row.names = FALSE)
+```
