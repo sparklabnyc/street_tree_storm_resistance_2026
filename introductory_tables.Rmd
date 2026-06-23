@@ -103,3 +103,20 @@ ggplot(top30_serviced_trees, aes(x = reorder(species_scientific, frequency), y =
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+```{r}
+#service requests by borough
+servicerequest_location <- serviced_trees %>%
+  group_by(borough) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+#plotting it
+#seems to be quite proportional to the number of trees total in each borough (queens: 4.3%, mh: 1.6%)
+servicerequest_location %>%
+  ggplot(aes(x = reorder(borough, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
