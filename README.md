@@ -109,6 +109,7 @@ cd <repo_name>
   * tidyverse
   * readr
   * fuzzyjoin
+  * sf
 
 ---
 
@@ -130,4 +131,7 @@ cd <repo_name>
 ## Contact
 
 Ann Zhao Dai | azd2104@barnard.edu
-Barnard College, Department of Biological Sciences & Columbia University Mailman School of Public Health, Department of Environmental Health Sciences
+
+Barnard College, Department of Biological Sciences
+
+Columbia University Mailman School of Public Health, Department of Environmental Health Sciences
