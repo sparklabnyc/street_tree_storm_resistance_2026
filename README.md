@@ -44,7 +44,7 @@ As climate change leads to increased storm hazard severity, the health and struc
 
 ### 2a_dataprep
 * **2a_00_process_datasets**: filtering/cleaning raw data; in particular: making addresses consistent for readability, reformatting datetimes and geometry variables for joining
-* **2a_01_prep_servicedtrees: join service requests & hazard history by datetime to get 1b_stormservicerequests_data --> join with tree map data by geometry to get 1d_servicedtrees_data
+* **2a_01_prep_servicedtrees**: join service requests & hazard history by datetime to get 1b_stormservicerequests_data --> join with tree map data by geometry to get 1d_servicedtrees_data
 
 ### 2b_analysis
 * **2b_00_preliminary_figures**: create tables & graphs to characterize 1a_raw data (e.g. most common tree species, most common serviced species, service request location maps)
