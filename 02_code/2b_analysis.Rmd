@@ -1,0 +1,229 @@
+---
+title: "introductory_tables" output: html_document ---
+---
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+#frequency table of all street trees in NYC
+street_tree_counts <- tree_map %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+#cut to top 15
+top15_street_trees <- street_tree_counts %>%
+  slice_max(frequency, n = 15)
+```
+
+```{r}
+#cut to top 15
+top30_street_trees <- street_tree_counts %>%
+  slice_max(frequency, n = 30)
+```
+
+```{r}
+#frequency table of serviced trees
+serviced_tree_counts <- serviced_trees %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+serviced_tree_counts$geometry <- NULL
+
+#cut to top 15
+top30_serviced_trees <- serviced_tree_counts %>%
+  slice_max(frequency, n = 30)
+```
+
+```{r}
+#bar graph of top 15 street tree species
+top30_street_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+#bar graph of top 15 serviced trees
+top30_serviced_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+nyc_approved_trees <- read.csv("nyc_approved_trees.csv")
+```
+
+```{r}
+approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_trees, by = "species_scientific")
+```
+
+```{r}
+approved_tree_frequency %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+```{r}
+# Flag matches
+top30_street_trees <- top30_street_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+                             "Match", "No Match"))
+
+# Plot
+ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+top30_serviced_trees <- top30_street_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+                             "Match", "No Match"))
+
+# Plot
+ggplot(top30_serviced_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r}
+#service requests by borough
+servicerequest_location <- serviced_trees %>%
+  group_by(borough) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+#plotting it
+#seems to be quite proportional to the number of trees total in each borough (queens: 4.3%, mh: 1.6%)
+servicerequest_location %>%
+  ggplot(aes(x = reorder(borough, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+```
+
+-   heatmap of service requests by neighborhood
+
+-   how to get trees distance from each other
+
+-   once you get the species –\> use citree to see characteristics of top 10 bottom 10
+
+```{r}
+#merge rows that were counted twice
+serviced_trees <- serviced_trees %>%
+  distinct(geometry, service_request_date, .keep_all = TRUE)
+```
+
+```{r}
+# tree species that were serviced more than once
+repeated_requests <- serviced_trees[duplicated(serviced_trees$geometry) | duplicated(serviced_trees$geometry, fromLast = TRUE), ]
+
+repeated_requests <- serviced_trees %>%
+  group_by(geometry) %>%
+  mutate(geom_count = n()) %>%
+  filter(geom_count > 1) %>%
+  arrange(geometry)
+
+repeated_requests <- repeated_requests %>%
+  distinct(storm_event_id, .keep_all = TRUE)
+```
+
+```{r}
+repeated_requests <- repeated_requests %>%
+  group_by(geometry) %>%
+  filter(n() > 1) %>%
+  ungroup()
+```
+
+```{r}
+repeated_request_counts <- length(unique(repeated_requests$geometry))
+# 1184 trees were damaged more than once
+# ^ need to cut to take out trees that were called multiple times in the same storm (based on just date)
+```
+
+-   what proportion of the total population is each species
+
+-   what proportion of the total service requests is each species
+
+-   what proportion of the total species population are the service request trees (what you did before with the ratios)
+
+```{r}
+#ratio of each species to the total number of trees in NYC
+total_tree_ratios <- street_tree_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 703283, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+# ratio of each serviced species count to the total number of serviced trees
+serviced_tree_ratios <- serviced_tree_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 29436, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+# ratio of serviced trees for each population to total species population
+serviced_species_ratios <- serviced_tree_counts %>% left_join (street_tree_counts, by = "species_scientific")
+
+serviced_species_ratios <- serviced_species_ratios %>%
+  mutate(ratio = frequency.x / frequency.y, 
+percentage = round(ratio * 100, 2))
+
+```
+
+with genus now...?
+
+```{r}
+serviced_tree_genus_counts <- serviced_tree_counts %>%
+  mutate(genus = word(species_scientific, 1)) %>%
+  group_by(genus) %>%
+  summarise(frequency = sum(frequency)) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+street_tree_genus_counts <- street_tree_counts %>%
+  mutate(genus = word(species_scientific, 1)) %>%
+  group_by(genus) %>%
+  summarise(frequency = sum(frequency)) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+serviced_genus_ratios <- serviced_tree_genus_counts %>% left_join (street_tree_genus_counts, by = "genus")
+
+serviced_genus_ratios <- serviced_genus_ratios %>%
+  mutate(ratio = frequency.x / frequency.y, 
+percentage = round(ratio * 100, 2))
+```
+
+```{r}
+total_genus_ratios <- street_tree_genus_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 703283, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+serviced_genus_ratios <- serviced_tree_genus_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 29436, percentage = round(ratio * 100, 2)
+  )
+```
