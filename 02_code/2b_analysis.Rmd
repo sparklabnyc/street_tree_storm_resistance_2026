@@ -7,25 +7,20 @@ library(ggplot2)
 ```
 
 ```{r}
-#frequency table of all street trees in NYC
+# create table of top 30 street tree species in NYC
 street_tree_counts <- tree_map %>%
   group_by(species_scientific) %>%
   summarise(frequency = n()) %>%
   arrange(desc(frequency))
 
-#cut to top 15
-top15_street_trees <- street_tree_counts %>%
-  slice_max(frequency, n = 15)
-```
+street_tree_counts$geometry <- NULL
 
-```{r}
-#cut to top 15
 top30_street_trees <- street_tree_counts %>%
   slice_max(frequency, n = 30)
 ```
 
 ```{r}
-#frequency table of serviced trees
+# create table of top 30 serviced tree species in NYC
 serviced_tree_counts <- serviced_trees %>%
   group_by(species_scientific) %>%
   summarise(frequency = n()) %>%
@@ -39,85 +34,80 @@ top30_serviced_trees <- serviced_tree_counts %>%
 ```
 
 ```{r}
-#bar graph of top 15 street tree species
+#bar graph of top 30 street tree species
 top30_street_trees %>%
   ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
   geom_bar(stat = "identity") +
-  coord_flip()
+  coord_flip() +
+  labs(title = "Top 30 NYC Street Tree Species", x = "Species", y = "Number of trees")
 ```
 
 ```{r}
-#bar graph of top 15 serviced trees
+#bar graph of top 30 serviced trees
 top30_serviced_trees %>%
   ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
   geom_bar(stat = "identity") +
-  coord_flip()
+  coord_flip() +
+  labs(title = "Top 30 Serviced Tree Species", x = "Species", y = "Number of trees")
 ```
 
 ```{r}
+# get list of approved street trees for planting
 nyc_approved_trees <- read.csv("nyc_approved_trees.csv")
 ```
 
 ```{r}
-approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_trees, by = "species_scientific")
-```
+# create graph of the frequency of each approved street tree in NYC
 
-```{r}
+approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_trees, by = "species_scientific")
+
 approved_tree_frequency %>%
   ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
   geom_bar(stat = "identity") +
-  coord_flip()
+  coord_flip() +
+  labs(title = "Approved Tree Species Counts", x = "Species", y = "Number of trees") +
+  theme(axis.text.y = element_text(size = 6))
 ```
 
 ```{r}
-# Flag matches
+# Top 30 street trees, highlighting the approved species
 top30_street_trees <- top30_street_trees %>%
   mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
-                             "Match", "No Match"))
+                             "Approved", "Not approved"))
 
-# Plot
 ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
   geom_bar(stat = "identity") +  coord_flip() +
-  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  scale_fill_manual(values = c("Approved" = "forestgreen", "Not approved" = "grey75")) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+   labs(title = "Top 30 Street Tree Species", x = "Species", y = "Number of trees")
 ```
 
 ```{r}
-top30_serviced_trees <- top30_street_trees %>%
+top30_serviced_trees <- top30_serviced_trees %>%
   mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
-                             "Match", "No Match"))
+                             "Approved", "Not approved"))
 
 # Plot
 ggplot(top30_serviced_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
   geom_bar(stat = "identity") +  coord_flip() +
-  scale_fill_manual(values = c("Match" = "forestgreen", "No Match" = "grey75")) +
+  scale_fill_manual(values = c("Approved" = "forestgreen", "Not approved" = "grey75")) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+   labs(title = "Top 30 Serviced Tree Species", x = "Species", y = "Number of trees")
 ```
 
 ```{r}
-#service requests by borough
+# Create graph of service requests by borough
 servicerequest_location <- serviced_trees %>%
   group_by(borough) %>%
   summarise(frequency = n()) %>%
   arrange(desc(frequency))
-```
 
-```{r}
-#plotting it
-#seems to be quite proportional to the number of trees total in each borough (queens: 4.3%, mh: 1.6%)
 servicerequest_location %>%
   ggplot(aes(x = reorder(borough, frequency), y=frequency)) +
   geom_bar(stat = "identity") +
-  coord_flip()
+  coord_flip() +
+   labs(title = "Service Requests by Borough", x = "Borough", y = "Number of service requests")
 ```
-
--   heatmap of service requests by neighborhood
-
--   how to get trees distance from each other
-
--   once you get the species –\> use citree to see characteristics of top 10 bottom 10
 
 ```{r}
 #merge rows that were counted twice
@@ -183,6 +173,7 @@ serviced_species_ratios <- serviced_tree_counts %>% left_join (street_tree_count
 serviced_species_ratios <- serviced_species_ratios %>%
   mutate(ratio = frequency.x / frequency.y, 
 percentage = round(ratio * 100, 2))
+# e.g. 36% of populus tremoides were damaged
 
 ```
 
@@ -221,9 +212,9 @@ total_genus_ratios <- street_tree_genus_counts %>%
 ```
 
 ```{r}
-serviced_genus_ratios <- serviced_tree_genus_counts %>%
+serviced_genus_ratios_total <- serviced_tree_genus_counts %>%
   mutate(
-    total = sum(frequency),
-    ratio = frequency / 29436, percentage = round(ratio * 100, 2)
+    total = 29436,
+    ratio = frequency / total, percentage = round(ratio * 100, 2)
   )
 ```
