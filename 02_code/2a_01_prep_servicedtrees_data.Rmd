@@ -53,3 +53,57 @@ serviced_trees$storm_date <- format(serviced_trees$storm_date, "%Y-%m-%d %H:%M:%
 write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALSE)
 write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
 ```
+
+Adding estimates of height for each tree based on diameter at breast height
+
+```{r}
+height_eqs <- read_csv("height_equations.csv", show_col_types = FALSE)
+```
+
+```{r}
+# data table for all four types of equations
+calc_height <- function(dbh, model, B0, B1, B2) {
+  case_when(
+    model == "B0 + (DBH * B1) + (DBH^2 * B2)" ~ B0 + (dbh * B1) + (dbh^2 * B2),
+    model == "e^(B0 + (ln(DBH) * B1))"        ~ exp(B0 + (log(dbh) * B1)),
+    model == "B0 + (DBH * B1)"                ~ B0 + (dbh * B1),
+    model == "B0 + (ln(DBH) * B1)"            ~ B0 + (log(dbh) * B1),
+    TRUE ~ NA_real_
+  )
+}
+```
+
+```{r}
+# Split coefficients by taxonomic level
+species_eqs <- height_eqs %>% filter(level == "Species") %>%
+  select(species_scientific = taxon, model, B0, B1, B2)
+genus_eqs   <- height_eqs %>% filter(level == "Genus") %>%
+  select(genus = taxon, model, B0, B1, B2)
+```
+
+```{r}
+serviced_trees <- serviced_trees %>%
+  mutate(genus = word(species_scientific, 1))
+```
+
+```{r}
+trees_matched <- serviced_trees %>%
+  left_join(species_eqs, by = "species_scientific") %>%
+  left_join(genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
+  mutate(
+    model = coalesce(model, model_genus),
+    B0 = coalesce(B0, B0_genus),
+    B1 = coalesce(B1, B1_genus),
+    B2 = coalesce(B2, B2_genus)
+  ) %>%
+  select(-ends_with("_genus"))
+```
+
+```{r}
+trees_with_height <- trees_matched %>%
+  mutate(height = calc_height(stump_diameter, model, B0, B1, B2))
+```
+
+```{r}
+serviced_trees$species_scientific <- gsub("Platanus x acerifolia", "Platanus x acerfolia", serviced_trees$species_scientific)
+```

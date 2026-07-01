@@ -54,10 +54,12 @@ neighborhoods_ratio <- neighborhood_boundaries %>%
 
 ggplot(neighborhoods_ratio) +
   geom_sf(aes(fill = damage_ratio), color = "white", linewidth = 0.1) +
-  scale_fill_viridis_c(
-    option = "viridis",
-    labels = scales::percent,
-    na.value = "grey90",
+  scale_fill_distiller(
+     palette = "YlOrRd",
+  direction = 1,
+  trans = "sqrt",
+  labels = scales::percent,
+  na.value = "grey90",
     name = "Damage Ratio"
   ) +
   labs(title = "Storm Damage Ratio by NYC Neighborhood") +
