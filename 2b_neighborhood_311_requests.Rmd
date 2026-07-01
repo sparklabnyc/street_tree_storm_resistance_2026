@@ -1,0 +1,67 @@
+---
+title: "2b_neighborhood_service_requests"
+output: html_document
+date: "2026-07-01"
+---
+
+```{r}
+file_move(path = "/Users/anndai/Downloads/2020_Neighborhood_Tabulation_Areas_(NTAs)_20260624.geojson", new_path = "/Users/anndai/street_tree_storm_resistance_2026")
+```
+
+```{r}
+neighborhood_boundaries <- st_read("2020_Neighborhood_Tabulation_Areas_(NTAs)_20260624.geojson")
+```
+
+```{r}
+names(neighborhood_boundaries)
+head(neighborhood_boundaries)
+```
+
+```{r}
+st_crs(tree_map)
+st_crs(neighborhood_boundaries)
+
+alltrees <- st_transform(tree_map, st_crs(neighborhood_boundaries))
+damagedtrees <- st_transform(serviced_trees, st_crs(neighborhood_boundaries))
+```
+
+```{r}
+trees_joined <- st_join(alltrees, neighborhood_boundaries, join = st_within)
+damaged_joined <- st_join(damagedtrees, neighborhood_boundaries, join = st_within)
+```
+
+```{r}
+total_counts <- trees_joined %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "total_trees")
+
+damaged_counts <- damaged_joined %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "damaged_trees")
+
+ratio_df <- total_counts %>%
+  left_join(damaged_counts, by = "ntaname") %>%
+  mutate(
+    damaged_trees = ifelse(is.na(damaged_trees), 0, damaged_trees),
+    damage_ratio = damaged_trees / total_trees
+  ) %>%
+  arrange(desc(damage_ratio))
+```
+
+```{r}
+neighborhoods_ratio <- neighborhood_boundaries %>%
+  left_join(ratio_df, by = "ntaname")
+
+ggplot(neighborhoods_ratio) +
+  geom_sf(aes(fill = damage_ratio), color = "white", linewidth = 0.1) +
+  scale_fill_viridis_c(
+    option = "viridis",
+    labels = scales::percent,
+    na.value = "grey90",
+    name = "Damage Ratio"
+  ) +
+  labs(title = "Storm Damage Ratio by NYC Neighborhood") +
+  theme_void()
+```
+
+This is quite interesting - even after adjusting for the number of trees total in each neighborhood, the non-EJ Areas still have a higher damage ratio. I guess we can look at this from a different perspective: this is the ratio of service requests to total trees. Non-EJ Areas in general had higher numbers of service requests. This might be due to social factors: a higher number of non-English speakers, less access to phones/internet to send in requests in general, etc? What does this say about other types of 311 requests in severe weather situations?

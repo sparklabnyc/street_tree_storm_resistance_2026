@@ -142,12 +142,6 @@ repeated_request_counts <- length(unique(repeated_requests$geometry))
 # ^ need to cut to take out trees that were called multiple times in the same storm (based on just date)
 ```
 
--   what proportion of the total population is each species
-
--   what proportion of the total service requests is each species
-
--   what proportion of the total species population are the service request trees (what you did before with the ratios)
-
 ```{r}
 #ratio of each species to the total number of trees in NYC
 total_tree_ratios <- street_tree_counts %>%
@@ -217,4 +211,42 @@ serviced_genus_ratios_total <- serviced_tree_genus_counts %>%
     total = 29436,
     ratio = frequency / total, percentage = round(ratio * 100, 2)
   )
+```
+
+Categorizing trees by damage intensity and storm intensity
+
+```{r}
+serviced_trees_damage <- serviced_trees %>%
+  select("tree_id", "species_scientific", "geometry", "storm_issues", "tree_condition")
+```
+
+```{r}
+# renaming categories to combine them
+serviced_trees_damage <- serviced_trees_damage %>%
+  mutate(tree_condition = case_when(
+    grepl("Limb Down", tree_condition) ~ "Limb Down",
+    grepl("Tree Down", tree_condition) ~ "Tree Down",
+    grepl("Hanging Limb", tree_condition) ~ "Limb Down",
+    grepl("Poor Condition ", tree_condition) ~ "Poor Condition",
+    grepl("Tree Uprooted", tree_condition) ~ "Tree Down",  
+    TRUE ~ tree_condition))
+```
+
+```{r}
+#create contingency table of species and damage types
+cont_table <- (table(serviced_trees_damage$species_scientific, serviced_trees_damage$tree_condition))
+```
+
+```{r}
+#frequency table and graph of damage intensity
+damage_frequency <- serviced_trees_damage %>%
+  group_by(tree_condition) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+damage_frequency %>%
+  ggplot(aes(x = reorder(tree_condition, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+   labs(title = "Damage Intensity", x = "Damage type", y = "Frequency")
 ```
