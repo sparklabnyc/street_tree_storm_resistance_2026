@@ -82,8 +82,8 @@ genus_eqs   <- height_eqs %>% filter(level == "Genus") %>%
 ```
 
 ```{r}
-serviced_trees <- serviced_trees %>%
-  mutate(genus = word(species_scientific, 1))
+library(rgbif)
+serviced_trees_gbif <- name_backbone_checklist(serviced_trees$species_scientific)
 ```
 
 ```{r}
