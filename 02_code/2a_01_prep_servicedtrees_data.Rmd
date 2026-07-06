@@ -78,6 +78,10 @@ write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
 ```
 
 ```{r}
+nyc_approved_trees <- read.csv("nyc_approved_trees.csv")
+```
+
+```{r}
 #filtering down to approved tree species only
 serviced_trees_approved <- serviced_trees %>%
   semi_join(nyc_approved_trees, by = "species_scientific")

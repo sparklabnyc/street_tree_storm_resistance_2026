@@ -9,6 +9,36 @@ date: "2026-07-06"
 ```{r}
 # getting all taxonomic level names for each tree using GBIF
 library(rgbif)
+```
+
+```{r}
+serviced_trees_1 <- serviced_trees[1:5000, ]
+serviced_trees_gbif <- name_backbone_checklist(serviced_trees_1$species_scientific)
+
+serviced_trees_2 <- serviced_trees[5001:10000, ]
+serviced_trees_gbif1 <- name_backbone_checklist(serviced_trees_gbif_1$species_scientific)
+
+serviced_trees_3 <- serviced_trees[10001:15000, ]
+serviced_trees_gbif2 <- name_backbone_checklist(serviced_trees_3$species_scientific)
+
+serviced_trees_4 <- serviced_trees[15001:20000, ]
+serviced_trees_gbif3 <- name_backbone_checklist(serviced_trees_4$species_scientific)
+
+serviced_trees_5 <- serviced_trees[20001:25000, ]
+serviced_trees_gbif4 <- name_backbone_checklist(serviced_trees_5$species_scientific)
+
+serviced_trees_6 <- serviced_trees[25001:27000, ]
+serviced_trees_gbif5 <- name_backbone_checklist(serviced_trees_6$species_scientific)
+
+serviced_trees_7 <- serviced_trees[27001:29000, ]
+serviced_trees_gbif6 <- name_backbone_checklist(serviced_trees_7$species_scientific)
+
+serviced_trees_8 <- serviced_trees[29001: 29436, ]
+serviced_trees_gbif7 <- name_backbone_checklist(serviced_trees_8$species_scientific)
+```
+
+```{r}
+# resolving species names with GBIF, which gets us the order, family, and genus of each tree
 serviced_trees_gbif <- name_backbone_checklist(serviced_trees$species_scientific)
 ```
 
@@ -22,11 +52,21 @@ serviced_trees_gbif <- serviced_trees_gbif %>%
 ```
 
 ```{r}
-serviced_trees_classifications <- serviced_trees %>%
-  semi_join(serviced_trees_gbif)
+write.csv(serviced_trees_gbif, "serviced_trees_gbif.csv", row.names = FALSE)
 ```
 
 ```{r}
+# add taxonomy to full serviced trees data
+serviced_trees_classifications <- cbind(serviced_trees, serviced_trees_gbif)
+serviced_trees_classifications$species_scientific.1 <- NULL
+```
+
+```{r}
+write.csv(serviced_trees_classifications, "serviced_trees_classifications.csv", row.names = FALSE)
+```
+
+```{r}
+# calculating the height of each tree
 height_eqs <- read_csv("height_equations.csv", show_col_types = FALSE)
 ```
 
@@ -41,4 +81,97 @@ calc_height <- function(dbh, model, B0, B1, B2) {
     TRUE ~ NA_real_
   )
 }
+```
+
+```{r}
+height_species_eqs <- height_eqs %>% filter(level == "species") %>%
+  select(species_scientific = taxon, model, B0, B1, B2)
+
+height_genus_eqs <- height_eqs %>% filter(level == "genus") %>%
+  select(genus = taxon, model, B0, B1, B2)
+
+height_family_eqs <- height_eqs %>% filter(level == "family") %>%
+  select(family = taxon, model, B0, B1, B2)
+
+height_order_eqs <- height_eqs %>% filter(level == "order") %>%
+  select(order = taxon, model, B0, B1, B2)
+```
+
+```{r}
+trees_matched_height <- trees %>%
+  left_join(height_species_eqs, by = "species_scientific") %>%
+  left_join(height_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
+  left_join(height_family_eqs, by = "family", suffix = c("", "_family")) %>%
+  left_join(height_order_eqs, by = "order", suffix = c("", "_order")) %>%
+  mutate(
+    model = coalesce(model, model_genus, model_family, model_order),
+    B0    = coalesce(B0, B0_genus, B0_family, B0_order),
+    B1    = coalesce(B1, B1_genus, B1_family, B1_order),
+    B2    = coalesce(B2, B2_genus, B2_family, B2_order)
+  ) %>%
+  select(-ends_with("_genus"), -ends_with("_family"), -ends_with("_order"))
+```
+
+```{r}
+trees_with_height <- trees_matched_height %>%
+  mutate(height = calc_height(dbh, model, B0, B1, B2))
+
+trees_with_height %>%
+  filter(is.na(height)) %>%
+  count(species_scientific, genus, family, order, sort = TRUE)
+```
+
+```{r}
+# calculating the diameter of the crown of each tree
+crown_eqs <- read_csv("crown_equations.csv", show_col_types = FALSE)
+```
+
+```{r}
+calc_crown <- function(dbh, model, B0, B1, B2) {
+  case_when(
+    model == "B0 + (DBH * B1) + (DBH^2 * B2)" ~ B0 + (dbh * B1) + (dbh^2 * B2),
+    model == "e^(B0 + (ln(DBH) * B1))"        ~ exp(B0 + (log(dbh) * B1)),
+    model == "B0 + (DBH * B1)"                ~ B0 + (dbh * B1),
+    model == "B0 + (ln(DBH) * B1)"            ~ B0 + (log(dbh) * B1),
+    TRUE ~ NA_real_
+  )
+}
+```
+
+```{r}
+crown_species_eqs <- crown_eqs %>% filter(level == "species") %>%
+  select(species_scientific = taxon, model, B0, B1, B2)
+
+crown_genus_eqs <- crown_eqs %>% filter(level == "genus") %>%
+  select(genus = taxon, model, B0, B1, B2)
+
+crown_family_eqs <- crown_eqs %>% filter(level == "family") %>%
+  select(family = taxon, model, B0, B1, B2)
+
+crown_order_eqs <- crown_eqs %>% filter(level == "order") %>%
+  select(order = taxon, model, B0, B1, B2)
+```
+
+```{r}
+trees_matched <- trees %>%
+  left_join(crown_species_eqs, by = "species_scientific") %>%
+  left_join(crown_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
+  left_join(crown_family_eqs, by = "family", suffix = c("", "_family")) %>%
+  left_join(crown_order_eqs, by = "order", suffix = c("", "_order")) %>%
+  mutate(
+    model = coalesce(model, model_genus, model_family, model_order),
+    B0    = coalesce(B0, B0_genus, B0_family, B0_order),
+    B1    = coalesce(B1, B1_genus, B1_family, B1_order),
+    B2    = coalesce(B2, B2_genus, B2_family, B2_order)
+  ) %>%
+  select(-ends_with("_genus"), -ends_with("_family"), -ends_with("_order"))
+```
+
+```{r}
+trees_with_crown <- trees_matched_crown %>%
+  mutate(height = calc_height(dbh, model, B0, B1, B2))
+
+trees_with_crown %>%
+  filter(is.na(height)) %>%
+  count(species_scientific, genus, family, order, sort = TRUE)
 ```
