@@ -1,0 +1,44 @@
+---
+title: "tree metric data"
+output: html_document
+date: "2026-07-06"
+---
+
+## Estimating tree height and crown width based on DBH
+
+```{r}
+# getting all taxonomic level names for each tree using GBIF
+library(rgbif)
+serviced_trees_gbif <- name_backbone_checklist(serviced_trees$species_scientific)
+```
+
+```{r}
+# filter down and join with full tree data
+serviced_trees_gbif <- serviced_trees_gbif %>%
+  select("verbatim_name", "order", "family", "genus")
+
+serviced_trees_gbif <- serviced_trees_gbif %>%
+  rename(species_scientific = "verbatim_name")
+```
+
+```{r}
+serviced_trees_classifications <- serviced_trees %>%
+  semi_join(serviced_trees_gbif)
+```
+
+```{r}
+height_eqs <- read_csv("height_equations.csv", show_col_types = FALSE)
+```
+
+```{r}
+# data table for all four types of equations
+calc_height <- function(dbh, model, B0, B1, B2) {
+  case_when(
+    model == "B0 + (DBH * B1) + (DBH^2 * B2)" ~ B0 + (dbh * B1) + (dbh^2 * B2),
+    model == "e^(B0 + (ln(DBH) * B1))"        ~ exp(B0 + (log(dbh) * B1)),
+    model == "B0 + (DBH * B1)"                ~ B0 + (dbh * B1),
+    model == "B0 + (ln(DBH) * B1)"            ~ B0 + (log(dbh) * B1),
+    TRUE ~ NA_real_
+  )
+}
+```

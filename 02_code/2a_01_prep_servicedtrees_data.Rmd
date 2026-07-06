@@ -77,6 +77,12 @@ write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALS
 write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
 ```
 
+```{r}
+#filtering down to approved tree species only
+serviced_trees_approved <- serviced_trees %>%
+  semi_join(nyc_approved_trees, by = "species_scientific")
+```
+
 Adding estimates of height for each tree based on diameter at breast height
 
 ```{r}

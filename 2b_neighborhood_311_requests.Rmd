@@ -57,4 +57,4 @@ ggplot(neighborhoods_ratio) +
   theme_void()
 ```
 
-This is quite interesting - even after adjusting for the number of trees total in each neighborhood, the non-EJ Areas still have a higher damage ratio. I guess we can look at this from a different perspective: this is the ratio of service requests to total trees. Non-EJ Areas in general had higher numbers of service requests. This might be due to social factors: a higher number of non-English speakers, less access to phones/internet to send in requests in general, etc? What does this say about other types of 311 requests in severe weather situations?
+This is quite interesting - even after adjusting for the number of trees total in each neighborhood, the non-EJ Areas still have a higher damage ratio. I guess we can look at this from a different perspective: this is the ratio of service requests to total trees. Non-EJ Areas in general had higher numbers of service requests. This might be due to social factors: a higher number of non-English speakers, less access to phones/internet to send in requests in general, etc? What does this say about other types of 311 requests in severe weather situations?\
