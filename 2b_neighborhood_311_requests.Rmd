@@ -5,16 +5,7 @@ date: "2026-07-01"
 ---
 
 ```{r}
-file_move(path = "/Users/anndai/Downloads/2020_Neighborhood_Tabulation_Areas_(NTAs)_20260624.geojson", new_path = "/Users/anndai/street_tree_storm_resistance_2026")
-```
-
-```{r}
 neighborhood_boundaries <- st_read("2020_Neighborhood_Tabulation_Areas_(NTAs)_20260624.geojson")
-```
-
-```{r}
-names(neighborhood_boundaries)
-head(neighborhood_boundaries)
 ```
 
 ```{r}

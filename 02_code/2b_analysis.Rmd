@@ -109,38 +109,7 @@ servicerequest_location %>%
    labs(title = "Service Requests by Borough", x = "Borough", y = "Number of service requests")
 ```
 
-```{r}
-#merge rows that were counted twice
-serviced_trees <- serviced_trees %>%
-  distinct(geometry, service_request_date, .keep_all = TRUE)
-```
-
-```{r}
-# tree species that were serviced more than once
-repeated_requests <- serviced_trees[duplicated(serviced_trees$geometry) | duplicated(serviced_trees$geometry, fromLast = TRUE), ]
-
-repeated_requests <- serviced_trees %>%
-  group_by(geometry) %>%
-  mutate(geom_count = n()) %>%
-  filter(geom_count > 1) %>%
-  arrange(geometry)
-
-repeated_requests <- repeated_requests %>%
-  distinct(storm_event_id, .keep_all = TRUE)
-```
-
-```{r}
-repeated_requests <- repeated_requests %>%
-  group_by(geometry) %>%
-  filter(n() > 1) %>%
-  ungroup()
-```
-
-```{r}
-repeated_request_counts <- length(unique(repeated_requests$geometry))
-# 1184 trees were damaged more than once
-# ^ need to cut to take out trees that were called multiple times in the same storm (based on just date)
-```
+#### Getting simple ratios of each species to the totals
 
 ```{r}
 #ratio of each species to the total number of trees in NYC
@@ -168,10 +137,9 @@ serviced_species_ratios <- serviced_species_ratios %>%
   mutate(ratio = frequency.x / frequency.y, 
 percentage = round(ratio * 100, 2))
 # e.g. 36% of populus tremoides were damaged
-
 ```
 
-with genus now...?
+#### Repeating everything, but grouped by genus
 
 ```{r}
 serviced_tree_genus_counts <- serviced_tree_counts %>%
@@ -213,7 +181,7 @@ serviced_genus_ratios_total <- serviced_tree_genus_counts %>%
   )
 ```
 
-Categorizing trees by damage intensity and storm intensity
+#### Categorizing trees by damage intensity and storm intensity
 
 ```{r}
 serviced_trees_damage <- serviced_trees %>%

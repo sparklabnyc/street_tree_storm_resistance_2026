@@ -49,6 +49,29 @@ serviced_trees$storm_date <- format(serviced_trees$storm_date, "%Y-%m-%d %H:%M:%
 ```
 
 ```{r}
+#merge rows that were counted twice, since some storms happened within 24 hours of each other
+serviced_trees <- serviced_trees %>%
+  distinct(geometry, service_request_date, .keep_all = TRUE)
+```
+
+```{r}
+# fix typo
+serviced_trees$species_scientific <- gsub("Platanus x acerfolia", "Platanus x acerifolia", serviced_trees$species_scientific)
+```
+
+```{r}
+# simplify categories of damage
+serviced_trees <- serviced_trees %>%
+  mutate(tree_condition = case_when(
+    grepl("Limb Down", tree_condition) ~ "Limb Down",
+    grepl("Tree Down", tree_condition) ~ "Tree Down",
+    grepl("Hanging Limb", tree_condition) ~ "Limb Down",
+    grepl("Poor Condition ", tree_condition) ~ "Poor Condition",
+    grepl("Tree Uprooted", tree_condition) ~ "Tree Down",  
+    TRUE ~ tree_condition))
+```
+
+```{r}
 #save files
 write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALSE)
 write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
@@ -102,8 +125,4 @@ trees_matched <- serviced_trees %>%
 ```{r}
 trees_with_height <- trees_matched %>%
   mutate(height = calc_height(stump_diameter, model, B0, B1, B2))
-```
-
-```{r}
-serviced_trees$species_scientific <- gsub("Platanus x acerifolia", "Platanus x acerfolia", serviced_trees$species_scientific)
 ```
