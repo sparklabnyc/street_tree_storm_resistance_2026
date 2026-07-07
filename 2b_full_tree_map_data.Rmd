@@ -1,0 +1,35 @@
+---
+title: "2b_full_tree_map_data"
+output: html_document
+date: "2026-07-07"
+---
+
+### Making a full dataset of street trees with metrics for all trees & whether or not they were damaged
+
+#### 1. Make dataset of non-damaged trees
+
+```{r}
+nonserviced_trees <- tree_map[!tree_map$tree_id %in% serviced_trees$tree_id, ]
+# sanity check: 681637 + 29436 = 711037, but there are a lot of repeated entries in the serviced_trees set (trees that were damaged more than once) so this makes sense
+```
+
+#### 2. Resolve species to prep for getting height/crown width
+
+```{r}
+nonserviced_trees_species <- as.data.frame(table(nonserviced_trees$species_scientific))
+nonserviced_trees_species <- as.character(nonserviced_trees_species$Var1)
+```
+
+```{r}
+nonserviced_trees_resolved <- name_backbone_checklist(nonserviced_trees_species)
+```
+
+```{r}
+nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
+  select("verbatim_name", "order", "family", "genus")
+
+nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
+  rename(species_scientific = "verbatim_name")
+```
+
+now we have a dataframe listing all of the species and their resolved names + higher orders, next step is to join this to the nonserviced list so that each indiv tree has its higher classifications –\> do DBH estimates!
