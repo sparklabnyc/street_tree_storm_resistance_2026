@@ -153,3 +153,24 @@ trees_with_crown %>%
   filter(is.na(crown_diameter)) %>%
   count(species_scientific, genus, family, order, sort = TRUE)
 ```
+
+Combine metric data into original serviced trees dataframe
+
+```{r}
+trees_with_height <- trees_with_height %>%
+  select("tree_id", "species_common", "species_scientific", "tree_condition", "stump_diameter", "height", "borough", "closest_address", "geometry", "service_request_date", "storm_date", "storm_issues")
+```
+
+```{r}
+trees_with_crown <- trees_with_crown %>%
+  select("crown_diameter")
+```
+
+```{r}
+serviced_trees_metrics <- cbind(trees_with_height, trees_with_crown)
+```
+
+```{r}
+serviced_trees_metrics <- serviced_trees_metrics %>%
+    select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "crown_diameter", "closest_address", "geometry")
+```
