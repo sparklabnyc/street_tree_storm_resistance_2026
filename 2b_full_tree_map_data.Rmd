@@ -9,6 +9,7 @@ date: "2026-07-07"
 #### 1. Make dataset of non-damaged trees
 
 ```{r}
+# make dataset of non-serviced trees by filtering out trees in the serviced list
 nonserviced_trees <- tree_map[!tree_map$tree_id %in% serviced_trees$tree_id, ]
 # sanity check: 681637 + 29436 = 711037, but there are a lot of repeated entries in the serviced_trees set (trees that were damaged more than once) so this makes sense
 ```
@@ -16,15 +17,18 @@ nonserviced_trees <- tree_map[!tree_map$tree_id %in% serviced_trees$tree_id, ]
 #### 2. Resolve species to prep for getting height/crown width
 
 ```{r}
+# extract species names from the nonserviced list
 nonserviced_trees_species <- as.data.frame(table(nonserviced_trees$species_scientific))
 nonserviced_trees_species <- as.character(nonserviced_trees_species$Var1)
 ```
 
 ```{r}
+# resolve names and get higher taxonomic levels using GBIF
 nonserviced_trees_resolved <- name_backbone_checklist(nonserviced_trees_species)
 ```
 
 ```{r}
+# filter to necessary columns
 nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
   select("verbatim_name", "order", "family", "genus")
 
@@ -35,12 +39,14 @@ nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
 ####  3. Join resolved species names to full tree list in order to run calculations
 
 ```{r}
+# match resolved species names to individual nonserviced trees
 nonserviced_trees <- left_join(nonserviced_trees, nonserviced_trees_resolved, by = "species_scientific")
 ```
 
 #### 4. Estimate heights w/ DBH
 
 ```{r}
+# same calculation process as the serviced trees
 nonserviced_trees_matched_height <- nonserviced_trees %>%
   left_join(height_species_eqs, by = "species_scientific") %>%
   left_join(height_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
