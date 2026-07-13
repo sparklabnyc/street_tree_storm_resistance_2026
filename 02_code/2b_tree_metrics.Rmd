@@ -12,27 +12,26 @@ library(rgbif)
 ```
 
 ```{r}
-# resolving species names with GBIF, which gets us the order, family, and genus of each tree
-serviced_trees_gbif <- name_backbone_checklist(serviced_trees$species_scientific)
+serviced_trees_species <- as.data.frame(table(serviced_trees$species_scientific))
+serviced_trees_species <- as.character(serviced_trees_species$Var1)
 ```
 
 ```{r}
-# filter down and join with full tree data
-serviced_trees_gbif <- serviced_trees_gbif %>%
+serviced_trees_resolved <- name_backbone_checklist(serviced_trees_species)
+```
+
+```{r}
+serviced_trees_resolved <- serviced_trees_resolved %>%
   select("verbatim_name", "order", "family", "genus")
 
-serviced_trees_gbif <- serviced_trees_gbif %>%
+serviced_trees_resolved <- serviced_trees_resolved %>%
   rename(species_scientific = "verbatim_name")
+
+serviced_trees_classifications <- left_join(serviced_trees, serviced_trees_resolved, by = "species_scientific")
 ```
 
 ```{r}
 write.csv(serviced_trees_gbif, "serviced_trees_gbif.csv", row.names = FALSE)
-```
-
-```{r}
-# add taxonomy to full serviced trees data
-serviced_trees_classifications <- cbind(serviced_trees, serviced_trees_gbif)
-serviced_trees_classifications$species_scientific.1 <- NULL
 ```
 
 ```{r}

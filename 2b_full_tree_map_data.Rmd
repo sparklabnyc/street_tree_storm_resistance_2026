@@ -36,7 +36,7 @@ nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
   rename(species_scientific = "verbatim_name")
 ```
 
-####  3. Join resolved species names to full tree list in order to run calculations
+#### 3. Join resolved species names to full tree list in order to run calculations
 
 ```{r}
 # match resolved species names to individual nonserviced trees
@@ -111,6 +111,10 @@ nonserviced_trees_metrics <- nonserviced_trees_metrics %>%
     select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "crown_diameter", "closest_address", "geometry")
 ```
 
+```{r}
+st_crs(nonserviced_trees_metrics) <- 4326  
+```
+
 #### 7. full list, including repeats –\> 0s and 1s
 
 ```{r}
@@ -122,14 +126,7 @@ tree_map_metrics <- tree_map_metrics %>%
   mutate(serviced = as.integer(tree_id %in% serviced_trees_metrics$tree_id))
 ```
 
-#### 8. full list without repeats for box plots
-
-```{r}
-tree_map_metrics_clean <- tree_map_metrics_clean %>%
-  distinct(geometry, .keep_all = TRUE)
-```
-
-#### 9. Clean/remove negative values
+#### 8. Clean/remove negative values
 
 ```{r}
 tree_map_metrics_clean <- tree_map_metrics %>% 
@@ -137,12 +134,35 @@ tree_map_metrics_clean <- tree_map_metrics %>%
   filter(crown_diameter >= 0)
 ```
 
+#### 9. full list without repeats for box plots + eliminate outliers of DBH
+
+```{r}
+tree_map_metrics_clean <- tree_map_metrics_clean %>%
+  distinct(geometry, .keep_all = TRUE)
+```
+
 10. make box plots of height, dbh, and crown diameter
 
 ```{r}
-
+ggplot(tree_map_metrics_clean, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
 ```
 
 ```{r}
-is.numeric(tree_map_metrics_clean$stump_diameter)
+serviced_trees_gis <- serviced_trees %>%
+  mutate(
+    longitude = st_coordinates(.)[, "X"],
+    latitude = st_coordinates(.)[, "Y"]
+  ) %>%
+  st_drop_geometry()
+```
+
+```{r}
+write_csv(serviced_trees_gis, "serviced_trees_gis.csv")
 ```
