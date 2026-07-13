@@ -166,3 +166,16 @@ serviced_trees_gis <- serviced_trees %>%
 ```{r}
 write_csv(serviced_trees_gis, "serviced_trees_gis.csv")
 ```
+
+```{r}
+tree_map_gis <- tree_map %>%
+  mutate(
+    longitude = st_coordinates(.)[, "X"],
+    latitude = st_coordinates(.)[, "Y"]
+  ) %>%
+  st_drop_geometry()
+```
+
+```{r}
+write_csv(tree_map_gis, "tree_map_gis.csv")
+```
