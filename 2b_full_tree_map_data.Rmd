@@ -122,4 +122,27 @@ tree_map_metrics <- tree_map_metrics %>%
   mutate(serviced = as.integer(tree_id %in% serviced_trees_metrics$tree_id))
 ```
 
-#### 8. full list without repeats
+#### 8. full list without repeats for box plots
+
+```{r}
+tree_map_metrics_clean <- tree_map_metrics_clean %>%
+  distinct(geometry, .keep_all = TRUE)
+```
+
+#### 9. Clean/remove negative values
+
+```{r}
+tree_map_metrics_clean <- tree_map_metrics %>% 
+  filter(height >= 0) %>%
+  filter(crown_diameter >= 0)
+```
+
+10. make box plots of height, dbh, and crown diameter
+
+```{r}
+
+```
+
+```{r}
+is.numeric(tree_map_metrics_clean$stump_diameter)
+```
