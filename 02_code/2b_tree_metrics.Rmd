@@ -31,10 +31,6 @@ serviced_trees_classifications <- left_join(serviced_trees, serviced_trees_resol
 ```
 
 ```{r}
-write.csv(serviced_trees_gbif, "serviced_trees_gbif.csv", row.names = FALSE)
-```
-
-```{r}
 write.csv(serviced_trees_classifications, "serviced_trees_classifications.csv", row.names = FALSE)
 ```
 
@@ -46,13 +42,14 @@ height_eqs <- read_csv("height_equations.csv", show_col_types = FALSE)
 ```
 
 ```{r}
-# data table for all four types of equations
+# data table for all five types of equations
 calc_height <- function(dbh, model, B0, B1, B2) {
   case_when(
     model == "B0 + (DBH * B1) + (DBH^2 * B2)" ~ B0 + (dbh * B1) + (dbh^2 * B2),
     model == "e^(B0 + (ln(DBH) * B1))"        ~ exp(B0 + (log(dbh) * B1)),
     model == "B0 + (DBH * B1)"                ~ B0 + (dbh * B1),
     model == "B0 + (ln(DBH) * B1)"            ~ B0 + (log(dbh) * B1),
+    model == "B0 + (B1 * DBH) - (B2 * DBH^2)" ~ B0 + (B1 * dbh) - (B2 * dbh^2),
     TRUE ~ NA_real_
   )
 }
@@ -113,6 +110,7 @@ calc_crown <- function(dbh, model, B0, B1, B2) {
     model == "e^(B0 + (ln(DBH) * B1))"        ~ exp(B0 + (log(dbh) * B1)),
     model == "B0 + (DBH * B1)"                ~ B0 + (dbh * B1),
     model == "B0 + (ln(DBH) * B1)"            ~ B0 + (log(dbh) * B1),
+    model == "B0 + (B1 * DBH) - (B2 * DBH^2)" ~ B0 + (B1 * dbh) - (B2 * dbh^2),
     TRUE ~ NA_real_
   )
 }

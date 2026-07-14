@@ -218,3 +218,71 @@ damage_frequency %>%
   coord_flip() +
    labs(title = "Damage Intensity", x = "Damage type", y = "Frequency")
 ```
+
+Timeline of storms with service requests\
+
+heat map of trees & serviced trees per neighborhood
+
+```{r}
+treemap_neighborhoods <- st_join(tree_map, neighborhood_boundaries)
+
+serviced_neighborhoods <- st_join(serviced_trees, neighborhood_boundaries)
+```
+
+```{r}
+treemap_counts <- treemap_neighborhoods %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "total_trees")
+
+serviced_counts <- serviced_neighborhoods %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "serviced_trees")
+```
+
+```{r}
+neighborhood_counts <- neighborhood_boundaries %>%
+  left_join(treemap_counts, by = "ntaname") %>%
+  left_join(serviced_counts, by = "ntaname") %>%
+  mutate(
+    total_trees = replace_na(total_trees, 0),
+    serviced_trees = replace_na(serviced_trees, 0)
+  )
+```
+
+```{r}
+centroids <- st_centroid(neighborhood_counts)
+```
+
+```{r}
+ggplot() +
+  geom_sf(
+    data = neighborhood_counts,
+    aes(fill = total_trees),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_sf(
+    data = centroids,
+    aes(size = serviced_trees),
+    color = "white",
+    alpha = 0.4
+  ) +
+  scale_fill_viridis_c(name = "Total Trees") +
+  scale_size_area(max_size = 5, name = "Serviced Trees") +
+  theme_minimal()
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(serviced_trees, aes(x = service_request_date)) +
+  geom_histogram(binwidth = 7 * 24 * 60 * 60) +  # 7-day bins
+  labs(x = "Date", y = "Number of service requests")
+```
+
+```{r}
+service_requests$service_request_date <- as.POSIXct(
+  service_requests$service_request_date,
+  format = "%Y-%m-%d %H:%M:%S"
+)
+```

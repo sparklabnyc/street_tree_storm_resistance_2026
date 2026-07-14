@@ -129,22 +129,21 @@ tree_map_metrics <- tree_map_metrics %>%
 #### 8. Clean/remove negative values
 
 ```{r}
-tree_map_metrics_clean <- tree_map_metrics %>% 
-  filter(height >= 0) %>%
-  filter(crown_diameter >= 0)
+tree_map_metrics$height[tree_map_metrics$height < 0] <- NA
+tree_map_metrics$crown_diameter[tree_map_metrics$crown_diameter < 0] <- NA
 ```
 
-#### 9. full list without repeats for box plots + eliminate outliers of DBH
+#### 9. full list without repeats for box plots
 
 ```{r}
-tree_map_metrics_clean <- tree_map_metrics_clean %>%
+tree_map_metrics_clean <- tree_map_metrics %>%
   distinct(geometry, .keep_all = TRUE)
 ```
 
 10. make box plots of height, dbh, and crown diameter
 
 ```{r}
-ggplot(tree_map_metrics_clean, aes(x = "", y = stump_diameter)) +
+alltreesdbh <- ggplot(tree_map_metrics_clean, aes(x = "", y = stump_diameter)) +
   geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
   labs(
     title = "Distribution of DBH",
@@ -153,6 +152,54 @@ ggplot(tree_map_metrics_clean, aes(x = "", y = stump_diameter)) +
   ) +
   theme_minimal()
 ```
+
+```{r}
+alltreesdbh
+```
+
+```{r}
+ggplot_build(alltreesdbh)$data[[1]]
+```
+
+```{r}
+servicedtreesdbh <- ggplot(serviced_trees_metrics, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of Serviced Trees DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
+
+servicedtreesdbh
+```
+
+```{r}
+ggplot_build(servicedtreesdbh)$data[[1]]
+```
+
+```{r}
+nonservicedtreesdbh <- ggplot(nonserviced_trees_metrics, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of Non-serviced Trees DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
+
+nonservicedtreesdbh
+```
+
+```{r}
+ggplot_build(nonservicedtreesdbh)$data[[1]]
+```
+
+```{r}
+
+```
+
+saving to plot in arcgis
 
 ```{r}
 serviced_trees_gis <- serviced_trees %>%
