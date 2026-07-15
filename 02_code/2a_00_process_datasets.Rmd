@@ -132,7 +132,7 @@ tree_map$species_scientific <- gsub("Platanus x acerfolia", "Platanus x acerifol
 tree_map$stump_diameter <- as.numeric(tree_map$stump_diameter)
 
 tree_map <- tree_map %>%
-  mutate(stump_diameter = ifelse(stump_diameter > 100, round(stump_diameter / 10), stump_diameter))
+  mutate(stump_diameter = ifelse(stump_diameter > 78, round(stump_diameter / 10), stump_diameter))
 ```
 
 ```{r}
