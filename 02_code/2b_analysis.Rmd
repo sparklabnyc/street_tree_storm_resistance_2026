@@ -219,8 +219,6 @@ damage_frequency %>%
    labs(title = "Damage Intensity", x = "Damage type", y = "Frequency")
 ```
 
-Timeline of storms with service requests\
-
 heat map of trees & serviced trees per neighborhood
 
 ```{r}
@@ -272,8 +270,14 @@ ggplot() +
   theme_minimal()
 ```
 
+timeline of service requests
+
 ```{r}
 library(ggplot2)
+
+service_requests$service_request_date <- as.POSIXct(
+  service_requests$service_request_date,
+  format = "%Y-%m-%d %H:%M:%S")
 
 ggplot(serviced_trees, aes(x = service_request_date)) +
   geom_histogram(binwidth = 7 * 24 * 60 * 60) +  # 7-day bins
@@ -281,8 +285,81 @@ ggplot(serviced_trees, aes(x = service_request_date)) +
 ```
 
 ```{r}
-service_requests$service_request_date <- as.POSIXct(
-  service_requests$service_request_date,
-  format = "%Y-%m-%d %H:%M:%S"
-)
+tree_map_metrics %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 10) %>%  
+  slice_max(n, n = 15) %>%
+  ggplot(aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Damage Rate by Species (Top 15 Most Common Species)", x = "", y = "% Damaged")
 ```
+
+```{r}
+damage_summary <- tree_map_metrics %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 10)
+
+top_bottom <- bind_rows(
+  damage_summary %>% slice_max(pct_damaged, n = 10) %>% mutate(group = "Highest"),
+  damage_summary %>% slice_min(pct_damaged, n = 10) %>% mutate(group = "Lowest")
+)
+ 
+ggplot(top_bottom, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged, fill = group)) +
+  geom_col(alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = c("Highest" = "firebrick", "Lowest" = "steelblue")) +
+  labs(
+    title = "Species with Highest and Lowest Storm Damage Rates",
+    x = "",
+    y = "% Damaged",
+    fill = ""
+  ) +
+  theme_minimal()
+```
+
+```{r}
+damage_summary_approved_max <- trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  slice_max(pct_damaged, n = 15)
+
+ggplot(damage_summary_approved_max, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col(fill = "steelblue", alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Storm Damage Rate by Approved Species",
+    x = "",
+    y = "% Damaged"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+damage_summary_approved_min <- trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  slice_min(pct_damaged, n = 15)
+
+ggplot(damage_summary_approved_min, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col(fill = "steelblue", alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Storm Damage Rate by Approved Species - Least Damaged",
+    x = "",
+    y = "% Damaged"
+  ) +
+  theme_minimal()
+```
+
+pretty good amount of tilia trees in the most damaged (especially considering population size), and a lot of quercus in the least damaged
+
+only 300 tilia x euchlora compared to 30,000 tilia in the most damaged set

@@ -1,0 +1,69 @@
+---
+title: "2c_regression_model"
+output: html_document
+date: "2026-07-20"
+---
+
+Building a regression model in layers to test association between tree species/genus and physical damage from severe weather
+
+1.  first-generation model: logistic regression using GLM, finding intercept, random effect, and slope for approved tree species and storm damage
+    - species as fixed effect, location as random effect
+    - confounders: DBH, height, crown diameter
+    - reference species: Quercus rubra (median damage rate for comparison as a "typical" species)
+
+```{r}
+# determining reference species
+trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  arrange(abs(pct_damaged - median(pct_damaged)))
+
+# using Prunus serrulata, as its damage rate is close to the median but with a larger sample size compared to Quercus rubra etc
+```
+
+```{r}
+# setting reference species
+trees_approved$species_scientific <- relevel(factor(trees_approved$species_scientific), ref = "Prunus serrulata")
+```
+
+```{r}
+install.packages("glmmTMB")
+library(glmmTMB)
+
+model_1 <- glmmTMB(serviced ~ species_scientific + stump_diameter + height + crown_diameter + (1 | ntaname),
+               data = trees_approved,
+               family = binomial)
+
+summary(model_1)
+```
+
+```{r}
+# model with just DBH as confounder
+model_2 <- glmmTMB(serviced ~ species_scientific + stump_diameter + (1 | ntaname),
+                   data = trees_approved,
+                   family = binomial)
+
+summary(model_2)
+```
+
+```{r}
+# model without predictors
+model_3 <- glmmTMB(serviced ~ species_scientific + (1 | ntaname),
+                   data = trees_approved,
+                   family = binomial)
+
+summary(model_3)
+```
+
+```{r}
+model_4 <- glmmTMB(serviced ~ species_scientific - 1 + (1 | ntaname),
+                 data = trees_approved,
+                 family = binomial)
+
+summary(model_4)
+```
+
+```{r}
+exp(fixef(model_3)$cond)
+```
