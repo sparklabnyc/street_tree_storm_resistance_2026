@@ -195,10 +195,6 @@ nonservicedtreesdbh
 ggplot_build(nonservicedtreesdbh)$data[[1]]
 ```
 
-```{r}
-
-```
-
 saving to plot in arcgis
 
 ```{r}

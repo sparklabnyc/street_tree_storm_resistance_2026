@@ -28,7 +28,6 @@ serviced_tree_counts <- serviced_trees %>%
 
 serviced_tree_counts$geometry <- NULL
 
-#cut to top 15
 top30_serviced_trees <- serviced_tree_counts %>%
   slice_max(frequency, n = 30)
 ```
@@ -53,13 +52,13 @@ top30_serviced_trees %>%
 
 ```{r}
 # get list of approved street trees for planting
-nyc_approved_trees <- read.csv("nyc_approved_trees.csv")
+nyc_approved_species <- read.csv("nyc_approved_species.csv")
 ```
 
 ```{r}
 # create graph of the frequency of each approved street tree in NYC
 
-approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_trees, by = "species_scientific")
+approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_species, by = "species_scientific")
 
 approved_tree_frequency %>%
   ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
@@ -72,7 +71,7 @@ approved_tree_frequency %>%
 ```{r}
 # Top 30 street trees, highlighting the approved species
 top30_street_trees <- top30_street_trees %>%
-  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_species$species_scientific, 
                              "Approved", "Not approved"))
 
 ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
@@ -84,7 +83,7 @@ ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = f
 
 ```{r}
 top30_serviced_trees <- top30_serviced_trees %>%
-  mutate(highlight = ifelse(species_scientific %in% nyc_approved_trees$species_scientific, 
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_species$species_scientific, 
                              "Approved", "Not approved"))
 
 # Plot

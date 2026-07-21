@@ -46,9 +46,8 @@ service_requests <- service_requests %>%
 
 ```{r}
 #reformatting date for joining later
-service_requests$service_request_date <- as.POSIXct(service_requests$service_request_date, format = "%Y %b %d %I:%M:%S %p")
-service_requests <- service_requests %>% 
-  mutate(DateTime = as.numeric(service_request_date))
+service_requests <- service_requests %>%
+  mutate(service_request_datetime = ymd_hms(service_request_date)) 
 ```
 
 ```{r}
@@ -82,6 +81,41 @@ service_requests <- service_requests %>%
   mutate(across(c(longitude, latitude), as.numeric))
 
 service_requests <- st_as_sf(service_requests, coords = c("longitude", "latitude"), crs = 4326)
+```
+
+#### **Filter and clean hazard history data**
+
+```{r}
+# select relevant columns
+hazard_history <- hazardhistory_raw %>%
+  select(storm_event_id, storm_date, storm_duration, storm_name, storm_issues, daily_total_rainfall, rainfall_rate, total_snowfall, wind_speed)
+```
+
+```{r}
+# parse storm start/date time and duration
+hazard_history <- hazard_history %>%
+  mutate(
+    storm_start_date = mdy_hm(storm_date)  # parses "1/18/2015 06:00 AM" format
+  )
+```
+
+```{r}
+hazard_history <- hazard_history %>%
+  mutate(
+    days_part = as.numeric(str_extract(storm_duration, "^\\d+(?=\\s*day)")),
+    hours_part = as.numeric(str_extract(storm_duration, "\\d+(?=\\s*hour)")),
+    days_part = ifelse(is.na(days_part), 0, days_part),
+    hours_part = ifelse(is.na(hours_part), 0, hours_part),
+    duration_period = days(days_part) + hours(hours_part)
+  )
+```
+
+```{r}
+hazard_history <- hazard_history %>%
+  mutate(
+    storm_end = storm_start_date + duration_period,
+    window_end = storm_end + hours(24)
+  )
 ```
 
 #### Filter and clean tree map data
@@ -124,6 +158,7 @@ tree_map <- st_as_sf(tree_map, coords = c("longitude", "latitude"), crs = 4326)
 tree_map$species_scientific <- gsub("Hamamalis", "Hamamelis", tree_map$species_scientific)
 tree_map$species_scientific <- gsub("Prunus 'Snow Goose x Copper Graft' - 'Snow Goose x Copper Graft' Cherry", "Prunus serrulata", tree_map$species_scientific)
 tree_map$species_scientific <- gsub("Platanus x acerfolia", "Platanus x acerifolia", tree_map$species_scientific)
+tree_map$species_scientific <- gsub("x\\.", "x", tree_map$species_scientific)
 ```
 
 ```{r}
