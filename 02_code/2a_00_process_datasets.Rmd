@@ -9,13 +9,18 @@ output: html_document
 library(readr) 
 library(tidyverse) 
 library(sf)
+library(here)
+library(data.table)
+library(rgbif)
+library(ggplot2)
+library(glmmTMB)
 ```
 
 ```{r}
 #Load datasets
-servicerequests_raw <- read_csv("Forestry_Service_Requests_20260609.csv")
-treemap_raw <- read_csv("nyc_trees_all.csv")
-hazardhistory_raw<- read_csv("NYCStormHazards.csv")
+servicerequests_raw <- read_csv(here("01_data", "1a_raw", "Forestry_Service_Requests_20260609.csv"))
+treemap_raw <- read_csv(here("01_data", "1a_raw", "nyc_trees_all.csv"))
+hazardhistory_raw <- read_csv(here("01_data", "1a_raw", "NYCStormHazards.csv"))
 ```
 
 #### Filter and clean service requests data
@@ -100,6 +105,7 @@ hazard_history <- hazard_history %>%
 ```
 
 ```{r}
+# converting the storm start date/time and storm length to a storm duration column
 hazard_history <- hazard_history %>%
   mutate(
     days_part = as.numeric(str_extract(storm_duration, "^\\d+(?=\\s*day)")),
@@ -111,6 +117,7 @@ hazard_history <- hazard_history %>%
 ```
 
 ```{r}
+# adding 24 hours to the duration
 hazard_history <- hazard_history %>%
   mutate(
     storm_end = storm_start_date + duration_period,
@@ -172,6 +179,7 @@ tree_map <- tree_map %>%
 
 ```{r}
 #save files
-write.csv(hazard_history, "hazard_history.csv", row.names = FALSE)
-write.csv(service_requests, "service_requests.csv", row.names = FALSE)
+write.csv(hazard_history, here("01_data", "1b_processed", "hazard_history.csv", row.names = FALSE))
+write.csv(service_requests, here("01_data", "1b_processed", "service_requests.csv", row.names = FALSE))
+write.csv(tree_map, here("01_data", "1b_processed", "tree_map.csv", row.names = FALSE))
 ```

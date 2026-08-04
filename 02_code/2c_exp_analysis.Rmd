@@ -1,0 +1,393 @@
+---
+title: "introductory_tables" output: html_document ---
+---
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+# create table of top 30 street tree species in NYC
+street_tree_counts <- tree_map %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+street_tree_counts$geometry <- NULL
+
+top30_street_trees <- street_tree_counts %>%
+  slice_max(frequency, n = 20)
+```
+
+```{r}
+# create table of top 30 serviced tree species in NYC
+serviced_tree_counts <- serviced_trees %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+serviced_tree_counts$geometry <- NULL
+
+top30_serviced_trees <- serviced_tree_counts %>%
+  slice_max(frequency, n = 30)
+```
+
+```{r}
+#bar graph of top 30 street tree species
+top30_street_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 20 NYC Street Tree Species", x = "Species", y = "Number of trees")
+```
+
+```{r}
+#bar graph of top 30 serviced trees
+top30_serviced_trees %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Top 30 Serviced Tree Species", x = "Species", y = "Number of trees")
+```
+
+```{r}
+# create graph of the frequency of each approved street tree in NYC
+
+approved_tree_frequency <- semi_join(street_tree_counts, nyc_approved_species, by = "species_scientific")
+
+approved_tree_frequency %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Approved Tree Species Counts", x = "Species", y = "Number of trees") +
+  theme(axis.text.y = element_text(size = 6))
+```
+
+```{r}
+# Top 30 street trees, highlighting the approved species
+top30_street_trees <- top30_street_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_species$species_scientific, 
+                             "Approved", "Not approved"))
+
+ggplot(top30_street_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Approved" = "forestgreen", "Not approved" = "grey75")) +
+  theme_minimal() +
+  theme(legend.title = element_blank()) +
+   labs(title = "Top 20 Street Tree Species", x = "Species", y = "Number of trees")
+```
+
+```{r}
+top30_serviced_trees <- top30_serviced_trees %>%
+  mutate(highlight = ifelse(species_scientific %in% nyc_approved_species$species_scientific, 
+                             "Approved", "Not approved"))
+
+# Plot
+ggplot(top30_serviced_trees, aes(x = reorder(species_scientific, frequency), y = frequency, fill = highlight)) +
+  geom_bar(stat = "identity") +  coord_flip() +
+  scale_fill_manual(values = c("Approved" = "forestgreen", "Not approved" = "grey75")) +
+  theme_minimal() +
+   labs(title = "Top 30 Serviced Tree Species", x = "Species", y = "Number of trees")
+```
+
+```{r}
+# Create graph of service requests by borough
+servicerequest_location <- serviced_trees %>%
+  group_by(borough) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+servicerequest_location %>%
+  ggplot(aes(x = reorder(borough, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+   labs(title = "Service Requests by Borough", x = "Borough", y = "Number of service requests")
+```
+
+#### Getting simple ratios of each species to the totals
+
+```{r}
+#ratio of each species to the total number of trees in NYC
+total_tree_ratios <- street_tree_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 703283, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+# ratio of each serviced species count to the total number of serviced trees
+serviced_tree_ratios <- serviced_tree_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 29436, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+# ratio of serviced trees for each population to total species population
+serviced_species_ratios <- serviced_tree_counts %>% left_join (street_tree_counts, by = "species_scientific")
+
+serviced_species_ratios <- serviced_species_ratios %>%
+  mutate(ratio = frequency.x / frequency.y, 
+percentage = round(ratio * 100, 2))
+# e.g. 36% of populus tremoides were damaged
+```
+
+#### Repeating everything, but grouped by genus
+
+```{r}
+serviced_tree_genus_counts <- serviced_tree_counts %>%
+  mutate(genus = word(species_scientific, 1)) %>%
+  group_by(genus) %>%
+  summarise(frequency = sum(frequency)) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+street_tree_genus_counts <- street_tree_counts %>%
+  mutate(genus = word(species_scientific, 1)) %>%
+  group_by(genus) %>%
+  summarise(frequency = sum(frequency)) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+serviced_genus_ratios <- serviced_tree_genus_counts %>% left_join (street_tree_genus_counts, by = "genus")
+
+serviced_genus_ratios <- serviced_genus_ratios %>%
+  mutate(ratio = frequency.x / frequency.y, 
+percentage = round(ratio * 100, 2))
+```
+
+```{r}
+total_genus_ratios <- street_tree_genus_counts %>%
+  mutate(
+    total = sum(frequency),
+    ratio = frequency / 703283, percentage = round(ratio * 100, 2)
+  )
+```
+
+```{r}
+serviced_genus_ratios_total <- serviced_tree_genus_counts %>%
+  mutate(
+    total = 29436,
+    ratio = frequency / total, percentage = round(ratio * 100, 2)
+  )
+```
+
+#### Categorizing trees by damage intensity and storm intensity
+
+```{r}
+serviced_trees_damage <- serviced_trees %>%
+  select("tree_id", "species_scientific", "geometry", "storm_issues", "tree_condition")
+```
+
+```{r}
+#create contingency table of species and damage types
+cont_table <- (table(serviced_trees_damage$species_scientific, serviced_trees_damage$tree_condition))
+```
+
+```{r}
+#frequency table and graph of damage intensity
+damage_frequency <- serviced_trees_damage %>%
+  group_by(tree_condition) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+
+damage_frequency %>%
+  ggplot(aes(x = reorder(tree_condition, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+   labs(title = "Damage Intensity", x = "Damage type", y = "Frequency")
+```
+
+Heat map of trees & serviced trees per neighborhood
+
+```{r}
+# adding NTA names to tree map and serviced trees
+treemap_neighborhoods <- st_join(tree_map, neighborhood_boundaries)
+
+serviced_neighborhoods <- st_join(serviced_trees, neighborhood_boundaries)
+```
+
+```{r}
+# getting the frequency of each type of tree in each NTA
+treemap_counts <- treemap_neighborhoods %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "total_trees")
+
+serviced_counts <- serviced_neighborhoods %>%
+  st_drop_geometry() %>%
+  count(ntaname, name = "serviced_trees")
+```
+
+```{r}
+# join datasets
+neighborhood_counts <- neighborhood_boundaries %>%
+  left_join(treemap_counts, by = "ntaname") %>%
+  left_join(serviced_counts, by = "ntaname") %>%
+  mutate(
+    total_trees = replace_na(total_trees, 0),
+    serviced_trees = replace_na(serviced_trees, 0)
+  )
+```
+
+```{r}
+# create centroids/circles for map
+centroids <- st_centroid(neighborhood_counts)
+```
+
+```{r}
+# plot map
+ggplot() +
+  geom_sf(
+    data = neighborhood_counts,
+    aes(fill = total_trees),
+    color = "white",
+    linewidth = 0.2
+  ) +
+  geom_sf(
+    data = centroids,
+    aes(size = serviced_trees),
+    color = "white",
+    alpha = 0.4
+  ) +
+  scale_fill_viridis_c(name = "Total Trees") +
+  scale_size_area(max_size = 5, name = "Serviced Trees") +
+  theme_minimal()
+```
+
+timeline of service requests
+
+```{r}
+library(ggplot2)
+
+service_requests$service_request_date <- as.POSIXct(
+  service_requests$service_request_date,
+  format = "%Y-%m-%d %H:%M:%S")
+
+ggplot(serviced_trees, aes(x = service_request_date)) +
+  geom_histogram(binwidth = 7 * 24 * 60 * 60) +  # 7-day bins
+  labs(x = "Date", y = "Number of service requests")
+```
+
+```{r}
+tree_map_metrics %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 10) %>%  
+  slice_max(n, n = 15) %>%
+  ggplot(aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Damage Rate by Species (Top 15 Most Common Species)", x = "", y = "% Damaged")
+```
+
+```{r}
+damage_summary <- tree_map_metrics %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100)
+
+top_bottom <- bind_rows(
+  damage_summary %>% slice_max(pct_damaged, n = 15) %>% mutate(group = "Highest"),
+  damage_summary %>% slice_min(pct_damaged, n = 15) %>% mutate(group = "Lowest")
+)
+ 
+ggplot(top_bottom, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged, fill = group)) +
+  geom_col(alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  scale_fill_manual(values = c("Highest" = "firebrick", "Lowest" = "steelblue")) +
+  labs(
+    title = "Species with Highest and Lowest Storm Damage Rates",
+    x = "",
+    y = "% Damaged",
+    fill = ""
+  ) +
+  theme_minimal()
+```
+
+```{r}
+damage_summary_approved_max <- trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  slice_max(pct_damaged, n = 20)
+
+ggplot(damage_summary_approved_max, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col(fill = "steelblue", alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Storm Damage Rate by Approved Species",
+    x = "",
+    y = "% Damaged"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+damage_summary_approved_min <- trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  slice_min(pct_damaged, n = 20)
+
+ggplot(damage_summary_approved_min, aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col(fill = "steelblue", alpha = 0.85) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Storm Damage Rate by Approved Species - Least Damaged",
+    x = "",
+    y = "% Damaged"
+  ) +
+  theme_minimal()
+```
+
+pretty good amount of tilia trees in the most damaged (especially considering population size), and a lot of quercus in the least damaged
+
+only 300 tilia x euchlora compared to 30,000 tilia in the most damaged set
+
+```{r}
+damage_summary_approved_max_genus <- trees_approved %>%
+  group_by(genus) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%
+  slice_max(pct_damaged, n = 45)
+
+ggplot(damage_summary_approved_max_genus, aes(x = reorder(genus, pct_damaged), y = pct_damaged)) +
+  geom_col(fill = "steelblue", alpha = 0.85) +
+  theme(axis.text.y = element_text(angle = 45, vjust = 1, hjust = 1)) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(
+    title = "Storm Damage Rate by Approved Genera",
+    x = "",
+    y = "% Damaged"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+trees_approved %>%
+  group_by(species_scientific) %>%
+  summarize(pct_damaged = mean(serviced, na.rm = TRUE), n = n()) %>%
+  filter(n >= 100) %>%  
+  slice_max(n, n = 15) %>%
+  ggplot(aes(x = reorder(species_scientific, pct_damaged), y = pct_damaged)) +
+  geom_col() +
+  coord_flip() +
+  scale_y_continuous(labels = scales::percent) +
+  labs(title = "Damage Rate by Species (Top 15 Most Common Approved)", x = "", y = "% Damaged")
+```
+
+```{r}
+approved_tree_counts <- trees_approved %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+```

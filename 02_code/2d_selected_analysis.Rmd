@@ -1,0 +1,41 @@
+---
+title: "2d_selected_analysis"
+output: html_document
+date: "2026-07-23"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Re-analyzing tree data, focusing on 21 selected species
+
+- species selected based on initial exploratory data - most common tree species, highest/lowest damage ratio, common genera, previously cited as most/least resilient to storm damage
+
+```{r}
+selected_species <- read.csv(here("01_data", "1d_support", "selected_species.csv"))
+```
+
+```{r}
+# getting list of just these species from the approved list
+trees_selected <- trees_approved %>%
+  filter(
+    species_scientific %in% selected_species$species_scientific)
+```
+
+```{r}
+# frequency table
+selected_counts <- trees_selected %>%
+  group_by(species_scientific) %>%
+  summarise(frequency = n()) %>%
+  arrange(desc(frequency))
+```
+
+```{r}
+# bar graph of selected species counts
+selected_counts %>%
+  ggplot(aes(x = reorder(species_scientific, frequency), y=frequency)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Frequency of selected species", x = "Species", y = "Number of trees")
+```

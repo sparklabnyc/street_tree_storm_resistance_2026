@@ -29,6 +29,14 @@ trees_approved$species_scientific <- relevel(factor(trees_approved$species_scien
 
 ```{r}
 install.packages("glmmTMB")
+```
+
+```{r}
+library(glmmTMB)
+```
+
+```{r}
+install.packages("glmmTMB")
 library(glmmTMB)
 
 model_1 <- glmmTMB(serviced ~ species_scientific + stump_diameter + height + crown_diameter + (1 | ntaname),
@@ -66,4 +74,97 @@ summary(model_4)
 
 ```{r}
 exp(fixef(model_3)$cond)
+```
+
+```{r}
+library(broom.mixed)
+
+plot_model_3 <- tidy(model_3, effects = "fixed", conf.int = TRUE) %>%
+  filter(term != "(Intercept)") %>%   # drop intercept if present
+  mutate(
+    term = gsub("species_scientific", "", term),  # clean up label text
+    estimate = exp(estimate),          # convert log-odds -> odds ratio
+    conf.low = exp(conf.low),
+    conf.high = exp(conf.high)
+  )
+
+plot_model_3_top_bottom <- bind_rows(
+  plot_model_3 %>% slice_max(estimate, n = 15) %>% mutate(group = "Highest Risk"),
+  plot_model_3 %>% slice_min(estimate, n = 15) %>% mutate(group = "Lowest Risk")
+)
+
+ggplot(plot_model_3_top_bottom, aes(x = estimate, y = reorder(term, estimate))) +
+  geom_point(size = 2) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey40") +
+  scale_x_log10() +
+  scale_color_manual(values = c("firebrick", "steelblue")) +
+  labs(
+    title = "Storm Damage Risk by Species (Odds Ratios)",
+    x = "Odds Ratio (log scale)",
+    y = "",
+    color = ""
+  ) +
+  theme_minimal()
+```
+
+```{r}
+plot_model_3_filtered <- plot_model_3 %>%
+  left_join(trees_approved %>% count(species_scientific), by = c("term" = "species_scientific")) %>%
+  filter(n >= 100)
+```
+
+```{r}
+plot_model_3_top_bottom <- bind_rows(
+  plot_model_3_filtered %>% slice_max(estimate, n = 15) %>% mutate(group = "Highest Risk"),
+  plot_model_3_filtered %>% slice_min(estimate, n = 15) %>% mutate(group = "Lowest Risk")
+)
+
+ggplot(plot_model_3_top_bottom, aes(x = estimate, y = reorder(term, estimate))) +
+  geom_point(size = 2) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey40") +
+  scale_x_log10() +
+  scale_color_manual(values = c("firebrick", "steelblue")) +
+  labs(
+    title = "Storm Damage Risk by Species (Odds Ratios)",
+    x = "Odds Ratio (log scale)",
+    y = "",
+    color = ""
+  ) +
+  theme_minimal()
+```
+
+```{r}
+plot_model_2 <- tidy(model_2, effects = "fixed", conf.int = TRUE) %>%
+  filter(term != "(Intercept)") %>%   # drop intercept if present
+  mutate(
+    term = gsub("species_scientific", "", term),  # clean up label text
+    estimate = exp(estimate),          # convert log-odds -> odds ratio
+    conf.low = exp(conf.low),
+    conf.high = exp(conf.high)
+  )
+
+plot_model_2_filtered <- plot_model_2 %>%
+  left_join(trees_approved %>% count(species_scientific), by = c("term" = "species_scientific")) %>%
+  filter(n >= 100)
+
+plot_model_2_top_bottom <- bind_rows(
+  plot_model_2_filtered %>% slice_max(estimate, n = 15) %>% mutate(group = "Highest Risk"),
+  plot_model_2_filtered %>% slice_min(estimate, n = 15) %>% mutate(group = "Lowest Risk")
+)
+
+ggplot(plot_model_2_top_bottom, aes(x = estimate, y = reorder(term, estimate))) +
+  geom_point(size = 2) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
+  geom_vline(xintercept = 1, linetype = "dashed", color = "grey40") +
+  scale_x_log10() +
+  scale_color_manual(values = c("firebrick", "steelblue")) +
+  labs(
+    title = "Storm Damage Risk by Species (Odds Ratios)",
+    x = "Odds Ratio (log scale)",
+    y = "",
+    color = ""
+  ) +
+  theme_minimal()
 ```

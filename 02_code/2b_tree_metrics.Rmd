@@ -12,15 +12,18 @@ library(rgbif)
 ```
 
 ```{r}
+# extract species name and convert to character format
 serviced_trees_species <- as.data.frame(table(serviced_trees$species_scientific))
 serviced_trees_species <- as.character(serviced_trees_species$Var1)
 ```
 
 ```{r}
+# resolve names with rgbif, which gets the order, family, and genus name
 serviced_trees_resolved <- name_backbone_checklist(serviced_trees_species)
 ```
 
 ```{r}
+# select and rename relevant columns
 serviced_trees_resolved <- serviced_trees_resolved %>%
   select("verbatim_name", "order", "family", "genus")
 
@@ -31,14 +34,15 @@ serviced_trees_classifications <- left_join(serviced_trees, serviced_trees_resol
 ```
 
 ```{r}
-write.csv(serviced_trees_classifications, "serviced_trees_classifications.csv", row.names = FALSE)
+# save file
+write.csv(serviced_trees_classifications, here("01_data", "1c_intermediate",  "serviced_trees_classifications.csv", row.names = FALSE))
 ```
 
 Calculate/estimate the height of each tree using I-Tree Tools models
 
 ```{r}
 # calculating the height of each tree
-height_eqs <- read_csv("height_equations.csv", show_col_types = FALSE)
+height_eqs <- read_csv(here("01_data", "1d_support", "height_equations.csv", show_col_types = FALSE))
 ```
 
 ```{r}
@@ -99,11 +103,11 @@ trees_with_height %>%
 Calculating/estimating crown diameter of each tree using I-Tree Tools
 
 ```{r}
-# calculating the diameter of the crown of each tree
-crown_eqs <- read_csv("crown_equations.csv", show_col_types = FALSE)
+crown_eqs <- read_csv(here("01_data", "1d_support", "crown_equations.csv", show_col_types = FALSE))
 ```
 
 ```{r}
+# parse different equations
 calc_crown <- function(dbh, model, B0, B1, B2) {
   case_when(
     model == "B0 + (DBH * B1) + (DBH^2 * B2)" ~ B0 + (dbh * B1) + (dbh^2 * B2),
@@ -117,6 +121,7 @@ calc_crown <- function(dbh, model, B0, B1, B2) {
 ```
 
 ```{r}
+# separate by taxonomic level
 crown_species_eqs <- crown_eqs %>% filter(level == "Species") %>%
   select(species_scientific = taxon, model, B0, B1, B2)
 
@@ -131,6 +136,7 @@ crown_order_eqs <- crown_eqs %>% filter(level == "Order") %>%
 ```
 
 ```{r}
+# match to trees
 trees_matched_crown <- serviced_trees_classifications %>%
   left_join(crown_species_eqs, by = "species_scientific") %>%
   left_join(crown_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
@@ -146,6 +152,7 @@ trees_matched_crown <- serviced_trees_classifications %>%
 ```
 
 ```{r}
+# calculate
 trees_with_crown <- trees_matched_crown %>%
   mutate(crown_diameter = calc_crown(stump_diameter, model, B0, B1, B2))
 
@@ -174,4 +181,9 @@ serviced_trees_metrics <- cbind(trees_with_height, trees_with_crown)
 # filter to match with nonserviced trees since that dataframe contains less information
 serviced_trees_metrics <- serviced_trees_metrics %>%
     select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "crown_diameter", "closest_address", "geometry")
+```
+
+```{r}
+# save file
+write.csv(serviced_trees_metrics, here("01_data", "1e_summary", "serviced_trees_metrics.csv"))
 ```

@@ -8,6 +8,7 @@ output: html_notebook
 #### 1. Join hazard history and service requests to get a list of requests made during and 24 hours after a severe weather event
 
 ```{r}
+# getting all service requests during and 24 hours after a storm, including overlaps between multiple storms
 library(data.table)
 setDT(service_requests)
 setDT(hazard_history)
@@ -65,58 +66,8 @@ serviced_trees <- serviced_trees %>%
 
 ```{r}
 #save files
-write.csv(storm_service_requests, "storm_service_requests.csv", row.names = FALSE)
-write.csv(serviced_trees, "serviced_trees.csv", row.names = FALSE)
+write.csv(storm_service_requests, here("01_data", "1c_intermediate", "storm_service_requests.csv", row.names = FALSE))
+write.csv(serviced_trees, here("01_data", "1e_summary", "serviced_trees.csv", row.names = FALSE))
 ```
 
 \
-Filtering down to approved tree species
-
-```{r}
-approved_species <- read.csv("nyc_approved_species.csv")
-```
-
-```{r}
-approved_genus_only <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") == 1] 
-approved_full_species <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") > 1]  
-```
-
-```{r}
-approved_all_genera <- unique(c(
-  approved_genus_only,
-  word(approved_full_species, 1)
-))
-```
-
-```{r}
-tree_map_genera <- tree_map_metrics %>%
-  mutate(genus = word(species_scientific, 1))
-```
-
-```{r}
-trees_approved <- tree_map_genera %>%
-  filter(
-    species_scientific %in% approved_full_species |                          # rule 1: exact species match
-  genus %in% approved_genus_only |                                          # rule 2: whole genus approved
-  (species_scientific == genus & genus %in% approved_all_genera)            # rule 3: genus-only record, genus represented on approved list
-)
-```
-
-```{r}
-#filtering down to approved tree species only
-serviced_trees_approved <- trees_approved %>%
-  filter(trees_approved$serviced == "1")
-```
-
-```{r}
-# adding NTA names to dataset
-trees_approved <- st_as_sf(trees_approved)
-trees_approved <- st_transform(trees_approved, st_crs(neighborhood_boundaries))
-
-trees_approved <- st_join(trees_approved, neighborhood_boundaries, join = st_within)
-```
-
-```{r}
-trees_approved <- trees_approved %>%
-  select("tree_id", "species_common", "species_scientific", "genus", "stump_diameter", "height", "crown_diameter", "closest_address", "serviced", "ntaname", "geometry")
-```

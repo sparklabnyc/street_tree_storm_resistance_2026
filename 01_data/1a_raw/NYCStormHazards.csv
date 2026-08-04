@@ -1,0 +1,231 @@
+﻿storm_event_id,storm_date,storm_name,storm_event_type,storm_issues,storm_location,storm_duration,daily_total_rainfall,rainfall_rate,total_snowfall,wind_speed
+SW0390,1/18/2015 06:00 AM,Winter Storm Event,Winter Weather,Freezing Precipitation,"Bronx, Manhattan, Queens",1 day,,0.01-1,,1-20
+SW0391,1/24/2015 12:00 AM,"Light Snow, High Wind Event",Winter Weather,High Winds,"Queens, Staten Island, Manhattan, Bronx",1 day,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0392,1/26/2015 08:00 AM,"January 2015 North American Blizzard ""Winter Storm Juno""",Winter Weather,"High Winds, Heavy Snow","Bronx, Brooklyn, Manhattan, Staten Island, Queens",1 day,0.01-0.99,0.01-1,12+,21-40
+SW0393,1/30/2015 06:00 PM,High Wind Event,Winter Weather,High Winds,Queens,"21 hours, 55 minutes",,,0.01-5.99,21-40
+SW0394,2/1/2015 09:00 PM,Winter Storm Event,Winter Weather,Heavy Snow,"Queens, Staten Island, Brooklyn, Bronx",1 day,1-1.99,0.01-1,0.01-5.99,
+SW0395,2/2/2015 12:00 AM,Winter Storm Event,Winter Weather,Heavy Snow,"Bronx, Brooklyn, Manhattan, Queens",1 day,1-1.99,0.01-1,0.01-5.99,
+SW0396,2/13/2015 12:51 AM,"Light Snow, High Wind Event",Winter Weather,High Winds,"Queens, Staten Island, Manhattan, Bronx","2 days, 21 hours",0.01-0.99,0.01-1,0.01-5.99,21-40
+SW0398,2/21/2015 12:00 AM,"Light Snow, Ice Event",Winter Weather,Freezing Precipitation,"Bronx, Brooklyn, Manhattan, Staten Island, Queens",1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW0399,3/1/2015 12:00 AM,Winter Storm Event,Winter Weather,Heavy Snow,"Queens, Staten Island, Manhattan, Brooklyn, Bronx",1 day,0.01-0.99,0.01-1,6-11.99,1-20
+SW0400,3/5/2015 12:00 AM,Winter Storm Event,Winter Weather,Heavy Snow,"Bronx, Brooklyn, Manhattan, Staten Island, Queens","2 days, 15 hours",0.01-0.99,0.01-1,6-11.99,21-40
+SW0402,4/2/2015 12:00 AM,High Wind Event,Thunderstorms,"High Winds, Flash Flooding",Queens,3 days,2-2.99,2-3,,21-40
+SW0404,5/31/2015 12:00 AM,"Heavy Rain, Flash Flood Event",Thunderstorms,Flash Flooding,"Queens, Staten Island",1 day,2-2.99,1-2,,1-20
+SW0405,6/23/2015 12:00 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,0.01-0.99,0.01-1,,1-20
+SW0406,6/28/2015 12:00 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,"Queens, Staten Island, Bronx, Brooklyn, Manhattan",1 day,0.01-0.99,0.01-1,,1-20
+SW0407,7/1/2015 12:00 AM,"Heavy Rain, Flash Flood Event",Thunderstorms,"Flash Flooding, High Winds","Manhattan, Brooklyn, Bronx, Staten Island, Queens",1 day,0.01-0.99,0.01-1,,1-20
+SW0408,8/4/2015 12:00 AM,High Wind Event,Thunderstorms,"High Winds, Flash Flooding","Queens, Staten Island, Bronx, Brooklyn, Manhattan",1 day,2-2.99,2-3,,
+SW0410,8/21/2015 02:00 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,8 hours,2-2.99,1-2,,1-20
+SW0414,1/9/2016 12:00 AM,"High Wind, Coastal Flood Event",Winter Weather,"Coastal Flooding, High Winds","Queens, Staten Island, Brooklyn","1 day, 19 hours",2-2.99,0.01-1,,1-20
+SW0415,1/22/2016 02:00 AM,"January 2016 Blizzard ""Winter Storm Jonas""",Winter Weather,"High Winds, Heavy Snow, Coastal Flooding","Brooklyn, Bronx, Manhattan, Staten Island, Queens","1 day, 20 hours",2-2.99,0.01-1,12+,21-40
+SW0416,2/8/2016 06:00 AM,"February 2016 Snow Event ""Winter Storm Mars""",Winter Weather,Coastal Flooding,Queens,"1 day, 5 hours",0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0417,2/16/2016 10:57 AM,High Wind Event,Winter Weather,High Winds,"Queens, Manhattan","1 day, 1 hour",1-1.99,0.01-1,,21-40
+SW0418,2/24/2016 06:00 PM,High Wind Event,Winter Weather,High Winds,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",12 hours,0.01-0.99,0.01-1,,21-40
+SW0419,3/28/2016 04:00 PM,High Wind Event,Winter Weather,High Winds,"Queens, Brooklyn",13 hours,0.01-0.99,0.01-1,,21-40
+SW0420,4/2/2016 06:02 AM,High Wind Event,Winter Weather,High Winds,"Bronx, Queens, Staten Island","1 day, 6 hours",0.01-0.99,0.01-1,,21-40
+SW0421,6/5/2016 02:00 PM,"Heavy Rain, High Wind Event",Thunderstorms,Flash Flooding,Bronx,4 hours,0.01-0.99,0.01-1,,1-20
+SW0422,7/14/2016 01:00 PM,"High Wind Event, Extreme Heat Event","Thunderstorms, Extreme Heat","Extreme Heat, High Winds",Queens,"4 days, 7 hours",,0.01-1,,1-20
+SW0424,7/21/2016 04:57 PM,"Heavy Rain, High Wind Event, Extreme Heat Event","Extreme Heat, Thunderstorms","High Winds, Extreme Heat, Flash Flooding","Queens, Brooklyn","1 week, 2 days",3-3.99,1-2,,21-40
+SW0426,11/20/2016 02:54 AM,High Wind Event,Thunderstorms,High Winds,Queens,"2 days, 7 hours",0.01-0.99,0.01-1,,21-40
+SW0428,12/15/2016 10:51 AM,"High Wind, Extreme Cold Event",Winter Weather,"High Winds, Extreme Cold",Queens,"2 hours, 9 minutes",,,,1-20
+SW0429,1/7/2017 11:00 AM,"Winter Storm Event ""Winter Storm Helena""",Winter Weather,Heavy Snow,"Queens, Staten Island, Manhattan, Bronx, Brooklyn",9 hours,0.01-0.99,0.01-1,6-11.99,21-40
+SW0430,2/9/2017 07:00 AM,"Winter Storm Event ""Winter Storm Niko""",Winter Weather,"Heavy Snow, High Winds","Brooklyn, Bronx, Manhattan, Staten Island, Queens",6 hours,0.01-0.99,0.01-1,6-11.99,21-40
+SW0431,3/14/2017 02:00 AM,"March 2017 Nor'easter ""Winter Storm Stella""",Winter Weather,"High Winds, Heavy Snow, Coastal Flooding","Queens, Staten Island, Manhattan, Bronx, Brooklyn","1 day, 18 hours",1-1.99,0.01-1,6-11.99,21-40
+SW0432,5/5/2017 09:00 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,"Brooklyn, Bronx, Manhattan, Staten Island, Queens",7 hours,3-3.99,1-2,,21-40
+SW0540,6/19/2017 03:53 PM,"Flash/Inland Flooding, Heavy Rain Event",Thunderstorms,Flash Flooding,"Manhattan, Brooklyn, Bronx","1 hour, 13 minutes",0.01-0.99,0.01-1,,21-40
+SW0542,8/2/2017 04:37 PM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,Bronx,30 minutes,1-1.99,1-2,,1-20
+SW0544,10/29/2017 06:00 PM,Heavy Rain Event,Thunderstorms,"Coastal Flooding, Flash Flooding","Staten Island, Bronx","2 hours, 20 minutes",0.01-0.99,0.01-1,,21-40
+SW0545,11/10/2017 07:00 AM,High Wind Event,Winter Weather,High Winds,Queens,1 hour,,,,21-40
+SW0546,11/19/2017 10:00 AM,High Wind Event,Winter Weather,High Winds,"Queens, Manhattan",4 hours,,,,21-40
+SW0547,12/9/2017 09:00 AM,"Heavy Snow Event ""Winter Storm Benji""",Winter Weather,Heavy Snow,"Queens, Staten Island",14 hours,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0548,12/25/2017 07:00 AM,High Wind Event,Winter Weather,High Winds,"Queens, Brooklyn",5 hours,0.01-0.99,0.01-1,,21-40
+SW0526,1/4/2018 03:00 AM,"January 4 Blizzard ""Winter Storm Grayson""",Winter Weather,"High Winds, Heavy Snow, Coastal Flooding","Bronx, Manhattan, Queens, Staten Island","15 hours, 30 minutes",1-1.99,0.01-1,6-11.99,21-40
+SW0527,1/30/2018 06:30 AM,Flooding Event,Thunderstorms,"Coastal Flooding, Flash Flooding",Queens,1 hour,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0528,2/7/2018 08:00 AM,Freezing Rain Event,Winter Weather,Freezing Precipitation,Manhattan,11 hours,1-1.99,1-2,0.01-5.99,21-40
+SW0529,2/17/2018 05:00 PM,Heavy Snow Event,Winter Weather,Heavy Snow,"Manhattan, Bronx, Queens","7 hours, 30 minutes",0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0530,3/2/2018 07:00 AM,"March 2-5 Nor'Easter ""Winter Storm Riley""",Winter Weather,"High Winds, Coastal Flooding","Queens, Staten Island, Bronx, Manhattan","1 day, 16 hours",1-1.99,0.01-1,0.01-5.99,21-40
+SW0531,3/7/2018 02:00 AM,"March 7-8 Nor'Easter ""Winter Storm Quinn""",Winter Weather,"Coastal Flooding, High Winds","Manhattan, Bronx, Staten Island, Queens",20 hours,1-1.99,0.01-1,0.01-5.99,21-40
+SW0532,3/13/2018 12:00 AM,"March 13-15 Nor'Easter "" Winter Storm Skylar""",Winter Weather,High Winds,"Queens, Staten Island, Bronx, Manhattan","13 hours, 30 minutes",0.01-0.99,0.01-1,0.01-5.99,21-40
+SW0533,3/21/2018 05:00 AM,"March 20-22 Nor'Easter ""Winter Storm Toby""",Winter Weather,"High Winds, Heavy Snow",Queens,"1 day, 2 hours",0.01-0.99,0.01-1,12+,21-40
+SW0534,4/2/2018 05:00 AM,Winter Storm Event,Winter Weather,Heavy Snow,Queens,7 hours,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW0535,4/4/2018 05:00 PM,High Wind Event,Winter Weather,High Winds,"Queens, Staten Island, Manhattan, Bronx",2 hours,,0.01-1,,21-40
+SW0536,4/16/2018 06:23 AM,"Flash/Inland Flooding, Heavy Rain, High Wind Event",Thunderstorms,"High Winds, Coastal Flooding, Flash Flooding","Brooklyn, Manhattan, Queens","14 hours, 37 minutes",2-2.99,0.01-1,,21-40
+SW0537,5/15/2018 04:20 PM,Tornado Event,Thunderstorms,"High Winds, Tornado","Queens, Brooklyn","1 hour, 15 minutes",1-1.99,1-2,,1-20
+SW0538,6/28/2018 05:38 PM,Flash Flood Event,Thunderstorms,Flash Flooding,Queens,41 minutes,1-1.99,0.01-1,,1-20
+SW0651,7/27/2018 04:39 PM,"Heavy Rain, Flash/Inland Flooding Event",Thunderstorms,Flash Flooding,Staten Island,"1 day, 1 hour",4+,2-3,,1-20
+SW0653,10/27/2018 12:00 AM,Nor'Easter,Winter Weather,"High Winds, Coastal Flooding","Queens, Staten Island, Bronx, Brooklyn, Manhattan","1 day, 23 hours",1-1.99,0.01-1,,21-40
+SW0759,3/4/2019 12:00 AM,Heavy Snow Event,Winter Weather,Heavy Snow,"Manhattan, Brooklyn, Bronx, Queens, Staten Island",1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW0760,11/15/2018 12:00 AM,Winter Storm Avery,Winter Weather,"Heavy Snow, High Winds, Coastal Flooding",Staten Island,1 day,0.01-0.99,0.01-1,6-11.99,21-40
+SW0761,1/2/2016 03:59 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,"Staten Island, Queens, Bronx, Brooklyn, Manhattan",1 day,,,,
+SW0764,6/1/2016 10:30 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,1-2,,1-20
+SW0765,6/24/2016 11:59 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,1-2,,1-20
+SW0766,6/8/2016 12:59 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,1-2,,21-40
+SW0767,7/22/2016 11:52 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,3-3.99,1-2,,
+SW0768,8/20/2016 03:51 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,1-1.99,1-2,,1-20
+SW0769,1/23/2015 06:54 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,1-1.99,1-2,0.01-5.99,1-20
+SW0770,2/28/2015 12:59 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,4+,2-3,0.01-5.99,1-20
+SW0771,3/2/2015 02:55 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Brooklyn,1 day,2-2.99,1-2,0.01-5.99,
+SW0772,3/4/2015 06:57 PM,Heavy Rain Event,Winter Weather,Heavy Snow,Staten Island,"1 day, 26 minutes",1-1.99,1-2,6-11.99,1-20
+SW0773,4/4/2015 08:29 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,2-2.99,2-3,,21-40
+SW0774,5/30/2015 06:45 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,1-2,,1-20
+SW0775,8/4/2015 10:45 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,2-2.99,2-3,,
+SW0776,8/21/2015 05:51 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,1-1.99,1-2,,1-20
+SW0810,1/13/2016 12:47 AM,High Wind Event,Winter Weather,High Winds,Bronx,1 day,,,,21-40
+SW0811,1/20/2016 03:51 AM,High Wind Event,Winter Weather,High Winds,Queens,1 day,,,,1-20
+SW0814,10/23/2016 01:54 PM,High Wind Event,Thunderstorms,High Winds,Brooklyn,1 day,0.01-0.99,0.01-1,,
+SW0815,11/20/2016 02:54 PM,High Wind Event,Winter Weather,High Winds,Brooklyn,"1 day, 19 hours",0.01-0.99,0.01-1,,21-40
+SW0838,2/13/2016 10:54 AM,High Wind Event,Winter Weather,High Winds,Brooklyn,6 hours,,,,21-40
+SW0844,3/2/2016 07:54 AM,High Wind Event,Winter Weather,High Winds,Brooklyn,1 day,,,,21-40
+SW0850,4/7/2016 12:59 PM,High Wind Event,Winter Weather,High Winds,Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW0853,6/12/2016 11:54 AM,High Wind Event,Thunderstorms,High Winds,Brooklyn,1 hour,,,,1-20
+SW0946,1/23/2017 02:30 PM,Heavy Rain Event,Thunderstorms,"Coastal Flooding, Flash Flooding, High Winds","Queens, Staten Island",1 day,1-1.99,0.01-1,,21-40
+SW0947,3/1/2017 07:30 PM,Heavy Rain Event,Thunderstorms,"High Winds, Flash Flooding",Staten Island,1 day,2-2.99,2-3,,21-40
+SW0948,3/19/2017 04:25 PM,Heavy Snow Event,Winter Weather,Heavy Snow,Staten Island,1 day,2-2.99,2-3,,1-20
+SW0949,3/23/2017 02:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,4+,2-3,,21-40
+SW0950,3/30/2017 01:25 PM,Heavy Rain Event,Thunderstorms,"Flash Flooding, Coastal Flooding",Staten Island,1 day,2-2.99,1-2,,21-40
+SW0951,4/2/2017 02:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,"1 day, 1 hour",3-3.99,2-3,,21-40
+SW0953,4/8/2017 02:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,0.01-1,,21-40
+SW0954,4/11/2017 03:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,2-2.99,2-3,,1-20
+SW0955,4/18/2017 02:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,4+,2-3,,1-20
+SW0959,4/29/2017 05:58 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,1-1.99,1-2,,
+SW0961,5/8/2017 03:25 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,"1 day, 23 hours",,2-3,,1-20
+SW0962,6/24/2017 06:54 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,5 minutes,1-1.99,1-2,,1-20
+SW0963,7/7/2017 10:54 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Staten Island,1 day,2-2.99,1-2,,1-20
+SW0964,7/11/2017 12:30 PM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,2-2.99,2-3,,1-20
+SW0967,6/1/2018 08:51 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,Queens,1 day,1-1.99,1-2,,1-20
+SW0968,3/22/2017 10:55 AM,High Wind Event,Winter Weather,High Winds,Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW0969,1/30/2018 07:54 PM,High Wind Event,Winter Weather,"High Winds, Coastal Flooding",Brooklyn,1 day,,,0.01-5.99,21-40
+SW0970,2/2/2018 10:54 AM,High Wind Event,Winter Weather,High Winds,Brooklyn,1 day,,,,21-40
+SW0971,1/26/2017 03:54 PM,High Wind Event,Winter Weather,High Winds,Brooklyn,1 day,0.01-0.99,0.01-1,,21-40
+SW0973,3/9/2017 09:54 AM,High Wind Event,Winter Weather,High Winds,Brooklyn,1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW0974,10/3/2017 10:42 PM,High Wind Event,Winter Weather,High Winds,"Brooklyn, Queens",1 day,0.01-0.99,0.01-1,,1-20
+SW1734,1/21/2019 12:00 AM,Extreme Cold Event,Winter Weather,"Coastal Flooding, High Winds, Extreme Cold","Staten Island, Queens, Bronx, Brooklyn, Manhattan",1 day,0.01-0.99,0.01-1,,21-40
+SW1735,1/31/2019 12:00 AM,Extreme Cold Event,Winter Weather,"Extreme Cold, High Winds","Manhattan, Brooklyn, Bronx, Queens, Staten Island",1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW1736,7/17/2018 01:45 PM,"Flash/Inland Flooding, Funnel Cloud Event",Thunderstorms,Flash Flooding,"Brooklyn, Manhattan",1 day,1-1.99,1-2,,21-40
+SW1737,8/4/2018 10:30 AM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,Bronx,1 day,0.01-0.99,0.01-1,,1-20
+SW1738,8/7/2018 12:00 AM,"Lightning, Flash/Inland Flooding Event",Thunderstorms,Flash Flooding,Queens,1 day,,,,
+SW1739,8/11/2018 07:28 AM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,"Queens, Manhattan",1 day,,,,
+SW1741,9/25/2018 12:22 PM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,"Queens, Bronx",1 day,3-3.99,1-2,,21-40
+SW1742,9/28/2018 05:05 AM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,"Queens, Staten Island",1 day,1-1.99,1-2,,21-40
+SW1743,12/21/2018 03:00 AM,"High Winds, Flash/Inland Flooding Event",Winter Weather,High Winds,Queens,1 day,1-1.99,0.01-1,,21-40
+SW1744,1/10/2019 10:00 AM,High Winds Event,Winter Weather,High Winds,Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW1745,1/20/2019 07:00 AM,"Coastal Flooding, High Winds Event",Winter Weather,"High Winds, Coastal Flooding",Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW1746,1/24/2019 10:00 AM,High Winds Event,Winter Weather,High Winds,"Queens, Staten Island, Brooklyn",1 day,1-1.99,0.01-1,,21-40
+SW1747,1/30/2019 02:00 PM,January 2019 Squall,Winter Weather,High Winds,"Brooklyn, Bronx, Manhattan, Staten Island, Queens",1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW1748,2/25/2019 12:00 AM,High Winds Event,Winter Weather,High Winds,"Queens, Staten Island, Manhattan, Brooklyn",1 day,4+,2-3,,21-40
+SW1749,4/15/2019 12:00 AM,High Winds Event,Winter Weather,High Winds,"Brooklyn, Manhattan, Staten Island, Queens",1 day,1-1.99,0.01-1,,21-40
+SW1750,5/26/2019 04:30 PM,High Winds Event,Thunderstorms,High Winds,"Staten Island, Bronx",1 day,0.01-0.99,0.01-1,,21-40
+SW1752,5/29/2019 06:31 AM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,Queens,1 day,,0.01-1,,21-40
+SW1753,6/2/2019 04:55 PM,Hail Event,Thunderstorms,"Large Hail, High Winds",Brooklyn,1 day,0.01-0.99,0.01-1,,21-40
+SW1754,6/29/2019 04:10 AM,High Winds Event,Thunderstorms,High Winds,"Manhattan, Staten Island",1 day,0.01-0.99,0.01-1,,1-20
+SW1755,7/17/2019 06:40 AM,"High Winds, Flash/Inland Flooding Event",Thunderstorms,"High Winds, Flash Flooding","Queens, Manhattan",1 day,1-1.99,1-2,,
+SW1757,7/22/2019 06:33 PM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,Queens,"5 hours, 27 minutes",2-2.99,1-2,,1-20
+SW1758,7/30/2019 07:00 PM,Rip Current Event,Thunderstorms,Flash Flooding,Queens,1 day,2-2.99,1-2,,1-20
+SW1759,7/31/2019 12:00 AM,"High Winds, Flash/Inland Flooding Event",Thunderstorms,Flash Flooding,Staten Island,1 day,2-2.99,1-2,,1-20
+SW1760,8/7/2019 04:20 PM,"Lightning, High Winds, Flash/Inland Flooding Event",Thunderstorms,"Flash Flooding, High Winds","Staten Island, Brooklyn",1 day,2-2.99,1-2,,1-20
+SW1761,8/21/2019 04:50 AM,High Winds Event,Thunderstorms,High Winds,"Brooklyn, Manhattan",1 day,0.01-0.99,0.01-1,,1-20
+SW1762,9/2/2019 01:46 PM,High Winds Event,Thunderstorms,High Winds,Staten Island,1 day,1-1.99,0.01-1,,1-20
+SW1763,9/4/2019 03:10 PM,High Winds Event,Thunderstorms,High Winds,Brooklyn,1 day,0.01-0.99,0.01-1,,1-20
+SW1764,10/1/2019 03:00 PM,High Winds Event,Thunderstorms,"High Winds, Air Quality",Queens,1 day,0.01-0.99,0.01-1,,1-20
+SW1765,10/16/2019 12:00 AM,Nor'Easter,Winter Weather,"High Winds, Coastal Flooding","Queens, Staten Island, Brooklyn",1 day,2-2.99,0.01-1,,21-40
+SW1766,10/27/2019 07:00 AM,High Winds Event,Thunderstorms,"Coastal Flooding, High Winds","Brooklyn, Queens",1 day,1-1.99,0.01-1,,
+SW1767,11/1/2019 12:00 AM,High Winds Event,Thunderstorms,High Winds,"Queens, Staten Island, Brooklyn",1 day,0.01-0.99,0.01-1,,21-40
+SW1768,10/22/2018 09:00 AM,Office of the Mayor Power Outage,Thunderstorms,Flash Flooding,Queens,"4 days, 8 hours",,,,1-20
+SW1976,11/29/2016 12:00 AM,Heavy Rain Event,Thunderstorms,Flash Flooding,"Queens, Staten Island, Brooklyn, Bronx, Manhattan",1 day,2-2.99,0.01-1,,21-40
+SW2574,12/20/2018 12:00 AM,Flash Flood Event,Thunderstorms,Flash Flooding,"Manhattan, Bronx, Brooklyn, Staten Island, Queens",1 day,0.01-0.99,0.01-1,,21-40
+SW2585,12/18/2019 04:00 PM,December 2019 Squall,Winter Weather,High Winds,"Manhattan, Bronx, Brooklyn, Staten Island, Queens",20 minutes,,,,1-20
+SW2586,1/8/2020 02:00 PM,High Wind event,Winter Weather,High Winds,Queens,1 day,,,,1-20
+SW2587,1/16/2020 12:00 PM,High Wind event,Winter Weather,High Winds,"Queens, Brooklyn",1 day,0.01-0.99,0.01-1,,21-40
+SW2588,1/25/2020 12:00 PM,High Wind event,Winter Weather,High Winds,Brooklyn,1 day,1-1.99,0.01-1,,21-40
+SW2589,2/7/2020 12:00 PM,High Wind event,Winter Weather,High Winds,Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW2590,2/27/2020 10:00 AM,High Wind event,Winter Weather,High Winds,Queens,1 day,,,,21-40
+SW2591,4/9/2020 12:54 PM,High Wind event,Winter Weather,"High Winds, Coastal Flooding",Staten Island,1 day,0.01-0.99,0.01-1,,1-20
+SW2592,4/13/2020 09:00 AM,High Wind event,Winter Weather,"Coastal Flooding, High Winds","Staten Island, Queens, Brooklyn, Bronx, Manhattan",1 day,1-1.99,0.01-1,,21-40
+SW2593,4/21/2020 01:35 PM,High Wind event,Winter Weather,High Winds,Bronx,1 day,0.01-0.99,0.01-1,,21-40
+SW2594,4/30/2020 12:00 PM,High Wind event,Winter Weather,High Winds,Queens,1 day,0.01-0.99,0.01-1,,21-40
+SW2628,8/27/2020 12:00 AM,Severe Weather,Thunderstorms,High Winds,"Queens, Staten Island, Manhattan, Bronx, Brooklyn",0 milliseconds,,,,1-20
+SW2629,12/16/2020 12:00 AM,Winter Storm Gail,Winter Weather,"High Winds, Heavy Snow, Coastal Flooding","Brooklyn, Bronx, Manhattan, Staten Island, Queens",1 day,1-1.99,0.01-1,6-11.99,21-40
+SW2630,1/31/2021 12:00 AM,Winter Storm Orlena ,Winter Weather,Heavy Snow,"Queens, Staten Island, Manhattan, Bronx, Brooklyn",2 days,1-1.99,0.01-1,12+,21-40
+SW2631,2/7/2021 12:00 AM,Winter Storm Quade,Winter Weather,Heavy Snow,"Brooklyn, Bronx, Manhattan, Staten Island, Queens",0 milliseconds,,,6-11.99,1-20
+SW2632,2/18/2021 12:00 AM,Winter Storm Viola,Winter Weather,Heavy Snow,"Queens, Staten Island, Manhattan, Bronx, Brooklyn",1 day,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW2684,12/13/2018 12:00 AM,Flash/Inland Flooding Event,Thunderstorms,Flash Flooding,Queens,4 days,1-1.99,0.01-1,,21-40
+SW2685,6/4/2021 04:00 PM,"Heavy Rain, Flash/Inland Flooding Event",Thunderstorms,Flash Flooding,"Queens, Staten Island, Brooklyn, Bronx, Manhattan",1 hour,1-1.99,0.01-1,,1-20
+SW2922,6/6/2020 02:10 PM,High Wind Event,Thunderstorms,High Winds,Queens,0 milliseconds,0.01-0.99,0.01-1,,1-20
+SW2923,6/29/2020 05:25 PM,"High Wind, Hail Event",Thunderstorms,"High Winds, Large Hail","Queens, Manhattan, Brooklyn",5 hours,0.01-0.99,0.01-1,,1-20
+SW2924,7/22/2020 06:14 PM,High Wind Event,Thunderstorms,High Winds,"Brooklyn, Queens",34 minutes,1-1.99,1-2,,1-20
+SW2925,11/2/2020 12:00 PM,High Wind Event,Winter Weather,High Winds,Manhattan,1 hour,,,,21-40
+SW2926,11/15/2020 08:35 PM,High Wind Event,Winter Weather,High Winds,"Manhattan, Queens",15 minutes,1-1.99,,,
+SW2927,11/30/2020 12:00 PM,High Wind Event,Winter Weather,High Winds,Queens,2 hours,0.01-0.99,0.01-1,,21-40
+SW2928,12/25/2020 12:00 AM,High Wind Event,Winter Weather,High Winds,"Queens, Brooklyn, Bronx",4 hours,3-3.99,3+,,21-40
+SW2929,1/29/2021 05:00 AM,High Wind Event,Winter Weather,High Winds,"Manhattan, Queens",1 hour,,0.01-1,,21-40
+SW2930,3/1/2021 11:30 AM,High Wind Event,Winter Weather,High Winds,Queens,13 hours,,0.01-1,,21-40
+SW2931,3/13/2021 01:00 AM,High Wind Event,Winter Weather,High Winds,Queens,"1 day, 14 hours",,,,41-60
+SW2932,3/28/2021 06:48 PM,High Wind Event,"Winter Weather, Thunderstorms",High Winds,Staten Island,0 milliseconds,0.01-0.99,0.01-1,,1-20
+SW2933,4/21/2021 01:40 PM,"High Wind, Hail Event",Thunderstorms,"High Winds, Large Hail","Queens, Brooklyn",0 milliseconds,,,,21-40
+SW2934,4/30/2021 03:00 PM,High Wind Event,Thunderstorms,High Winds,"Manhattan, Queens",1 hour,0.01-0.99,0.01-1,,21-40
+SW2935,7/8/2021 12:00 AM,"Heavy Rain, Flash Flood Event",Thunderstorms,Flash Flooding,"Queens, Staten Island, Manhattan, Brooklyn, Bronx",0 milliseconds,,,,1-20
+SW2626,8/3/2020 08:00 PM,Tropical Storm Isaias,Tropical Cyclone,"Flash Flooding, High Winds","Bronx, Brooklyn, Manhattan, Staten Island, Queens",18 hours,0.01-0.99,0.01-1,,21-40
+SW2621,7/10/2020 08:00 PM,Tropical Storm Fay,Tropical Cyclone,High Winds,"Queens, Staten Island, Manhattan, Brooklyn, Bronx",4 hours,2-2.99,0.01-1,,21-40
+SW2936,6/30/2021 09:00 PM,High Wind Event,Thunderstorms,High Winds,Manhattan,3 hours,0.01-0.99,0.01-1,,
+SW2937,8/21/2021 12:00 AM,Hurricane Henri,Tropical Cyclone,Flash Flooding,"Manhattan, Bronx, Brooklyn, Staten Island, Queens",3 days,4+,1-2,,21-40
+SW2938,9/1/2021 12:00 AM,Hurricane Ida,Tropical Cyclone,"Flash Flooding, High Winds","Queens, Staten Island, Brooklyn, Bronx, Manhattan","1 day, 10 hours",4+,3+,,41-60
+SW2939,7/9/2021 12:00 AM,Tropical Storm Elsa,Tropical Cyclone,"High Winds, Flash Flooding","Manhattan, Bronx, Brooklyn, Staten Island, Queens",1 day,2-2.99,1-2,,21-40
+SW2943,9/23/2021 12:00 AM,Flash Flood Event,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Staten Island, Queens","2 days, 23 hours",1-1.99,1-2,,21-40
+SW2944,10/25/2021 05:17 PM,Flash Flood Event,Tidal Flooding,Flash Flooding,"Queens, Staten Island, Brooklyn, Bronx, Manhattan",2 days,3-3.99,0.01-1,,21-40
+SW2950,6/2/2022 07:00 AM,Flash Flood,Tidal Flooding,Flash Flooding,"Queens, Staten Island, Bronx, Brooklyn, Manhattan","1 day, 2 hours",1-1.99,1-2,,21-40
+SW2952,7/23/2022 12:00 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Air Quality","Bronx, Manhattan","2 days, 19 hours",0.01-0.99,0.01-1,,21-40
+SW2955,8/9/2022 09:00 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",2 days,0.01-0.99,0.01-1,,21-40
+SW2956,8/21/2022 11:00 AM,Flash Flooding Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","2 days, 4 hours",1-1.99,1-2,,21-40
+SW2957,9/4/2022 04:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 15 hours",1-1.99,0.01-1,,21-40
+SW2958,9/13/2022 04:00 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 2 hours",1-1.99,1-2,,21-40
+SW2959,9/29/2022 05:00 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Air Quality","Manhattan, Bronx, Brooklyn, Queens, Staten Island","3 days, 17 hours",0.01-0.99,0.01-1,,21-40
+SW2960,10/12/2022 04:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 17 hours",1-1.99,0.01-1,,21-40
+SW2961,11/9/2022 11:00 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 22 hours",1-1.99,0.01-1,,21-40
+SW2962,12/20/2022 03:00 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Coastal Flooding, Air Quality","Staten Island, Queens, Brooklyn, Bronx, Manhattan","3 days, 22 hours",1-1.99,0.01-1,,21-40
+SW2965,4/28/2023 11:00 PM,Month of Rain in 72 Hours,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 12 hours",3-3.99,1-2,,21-40
+SW2968,3/13/2023 07:00 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 9 hours",1-1.99,0.01-1,,21-40
+SW2969,5/20/2023 12:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","18 hours, 30 minutes",0.01-0.99,0.01-1,,21-40
+SW2970,6/22/2023 09:30 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 week, 2 hours",0.01-0.99,0.01-1,,21-40
+SW2971,7/1/2023 04:30 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Air Quality","Manhattan, Bronx, Brooklyn, Queens, Staten Island","3 days, 19 hours",1-1.99,1-2,,21-40
+SW2972,7/7/2023 05:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","2 days, 16 hours",1-1.99,0.01-1,,21-40
+SW2973,7/13/2023 09:00 AM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Air Quality","Manhattan, Bronx, Brooklyn, Queens, Staten Island","3 days, 23 hours",2-2.99,1-2,,21-40
+SW2974,7/20/2023 08:00 AM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 week, 2 days",1-1.99,1-2,,21-40
+SW2976,7/26/2023 04:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","3 days, 5 hours",0.01-0.99,0.01-1,,21-40
+SW2977,8/6/2023 04:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","1 day, 21 hours",1-1.99,0.01-1,,21-40
+SW2978,8/9/2023 06:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 16 hours",0.01-0.99,0.01-1,,1-20
+SW2979,8/13/2023 04:00 PM,Flash Flood Emergency,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 2 hours",1-1.99,1-2,,1-20
+SW2980,9/28/2023 12:00 AM,Flash Flood and Severe Storm,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","2 days, 23 hours",4+,2-3,,21-40
+SW2981,7/13/2025 12:00 AM,Subway Flooding,Tidal Flooding,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","5 days, 23 hours",4+,2-3,,21-40
+SW2982,7/31/2025 12:00 AM,Flash Flood,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 23 hours",2-2.99,2-3,,21-40
+SW2983,9/21/2023 05:00 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Coastal Flooding",,"3 days, 21 hours",1-1.99,0.01-1,,21-40
+SW2984,9/29/2023 06:00 AM,Flash Flood Emergency,Tidal Flooding,"Coastal Flooding, Flash Flooding",,"1 day, 6 hours",4+,1-2,,21-40
+SW2985,10/5/2023 04:30 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Coastal Flooding","Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 15 hours",1-1.99,0.01-1,,21-40
+SW2986,11/21/2023 04:30 PM,Flash Flood Emergency,Tidal Flooding,"Coastal Flooding, Flash Flooding",,"17 hours, 30 minutes",1-1.99,0.01-1,,21-40
+SW2987,12/7/2023 04:00 PM,Flash Flood Emergency,Tidal Flooding,"Flash Flooding, Coastal Flooding",,"3 days, 21 hours",2-2.99,0.01-1,,21-40
+SW2988,12/18/2023 06:00 AM,Flash Flood Emergency,Tidal Flooding,"Coastal Flooding, Flash Flooding, High Winds","Staten Island, Queens, Brooklyn, Bronx, Manhattan","5 hours, 59 minutes",2-2.99,0.01-1,,21-40
+SW2989,1/9/2024 06:00 AM,Winter Weather Emergency,"Tidal Flooding, Winter Weather","Flash Flooding, Coastal Flooding","Manhattan, Bronx, Brooklyn, Queens, Staten Island",1 day,,3+,,21-40
+SW2990,1/15/2024 12:00 AM,Winter Weather Emergency,Winter Weather,"Extreme Cold, Freezing Precipitation, Heavy Snow","Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 23 hours",0.01-0.99,0.01-1,0.01-5.99,21-40
+SW2991,1/18/2024 12:00 AM,Winter Weather Emergency,Winter Weather,Coastal Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","2 days, 8 hours",0.01-0.99,0.01-1,0.01-5.99,21-40
+SW2992,3/23/2024 12:00 AM,Flash Flood Event,Other,"Coastal Flooding, Flash Flooding, High Winds","Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 23 hours",3-3.99,0.01-1,,21-40
+SW2993,4/1/2023 04:00 PM,Severe Weather,Thunderstorms,High Winds,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","7 hours, 59 minutes",0.01-0.99,0.01-1,,21-40
+SW2994,2/13/2024 04:00 AM,Winter Weather,Winter Weather,High Winds,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",12 hours,0.01-0.99,0.01-1,0.01-5.99,
+SW2995,2/17/2024 12:00 AM,Winter Weather,Winter Weather,High Winds,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","23 hours, 59 minutes",0.01-0.99,0.01-1,6-11.99,1-20
+SW2996,3/6/2024 01:00 PM,Flash Flooding,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",17 hours,2-2.99,0.01-1,,21-40
+SW2997,3/9/2024 12:00 AM,Flash Flooding,Thunderstorms,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","1 day, 23 hours",1-1.99,0.01-1,,21-40
+SW2998,4/3/2024 12:00 AM,Flash Flooding,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 11 hours",2-2.99,1-2,,21-40
+SW3001,9/8/2023 12:00 PM,Flash Flood Emergency,Tidal Flooding,"Coastal Flooding, Flash Flooding","Manhattan, Bronx, Brooklyn, Queens, Staten Island","5 days, 19 hours",2-2.99,1-2,,1-20
+SW3002,6/14/2024 12:01 AM,Severe Weather,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 day, 23 hours",1-1.99,0.01-1,,1-20
+SW3004,6/30/2024 12:00 AM,Severe Wether,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","23 hours, 59 minutes",1-1.99,1-2,,1-20
+SW3007,8/6/2024 02:00 PM,Flash Flooding,Thunderstorms,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",22 hours,,2-3,,1-20
+SW3008,8/9/2024 12:00 AM,Flash Flooding,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","23 hours, 59 minutes",0.01-0.99,0.01-1,,21-40
+SW3009,1/19/2025 12:00 AM,Snow,Winter Weather,Heavy Snow,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","23 hours, 59 minutes",0.01-0.99,0.01-1,,21-40
+SW3014,10/13/2025 12:00 AM,Flash Flooding,Thunderstorms,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","23 hours, 59 minutes",0.01-0.99,0.01-1,,21-40
+SW3015,10/30/2025 12:00 AM,Flash Flooding,Thunderstorms,Flash Flooding,"Manhattan, Bronx, Brooklyn, Queens, Staten Island","1 day, 23 hours",2-2.99,1-2,,21-40
+SW3016,11/5/2025 09:00 PM,11/5/2025 High Winds,Other,High Winds,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",11 hours,,,,21-40
+SW3017,12/13/2025 12:00 AM,12/13/25 Winter Weather,Winter Weather,Heavy Snow,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",1 day,0.01-0.99,0.01-1,0.01-5.99,21-40
+SW3018,12/19/2025 12:00 AM,12/19/2025 Flash Flooding,Other,Flash Flooding,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",1 day,1-1.99,0.01-1,,21-40
+SW3019,12/23/2025 12:00 AM,12/23/2025 Winter Weather,Winter Weather,Heavy Snow,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",1 day,0.01-0.99,0.01-1,,21-40
+SW3020,12/26/2025 12:00 AM,12/26/2025 Winter Weather,Winter Weather,Heavy Snow,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",1 day,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW3021,1/17/2026 12:00 AM,1/17/2026 Winter Weather,Winter Weather,Heavy Snow,"Manhattan, Bronx, Brooklyn, Queens, Staten Island",1 day,0.01-0.99,0.01-1,0.01-5.99,1-20
+SW3022,1/25/2026 12:00 AM,1/25/2026 Winter Weather (Winter Storm Fern),Winter Weather,Heavy Snow,"Staten Island, Queens, Brooklyn, Bronx, Manhattan",1 day,1-1.99,0.01-1,6-11.99,21-40
+SW3024,2/22/2026 12:00 AM,2/22/2026 Winter Weather (Blizzard),Winter Weather,Heavy Snow,"Staten Island, Queens, Brooklyn, Bronx, Manhattan","1 week, 2 days",1-1.99,0.01-1,12+,21-40

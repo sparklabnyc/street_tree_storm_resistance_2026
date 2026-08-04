@@ -11,6 +11,7 @@ date: "2026-07-07"
 ```{r}
 # make dataset of non-serviced trees by filtering out trees in the serviced list
 nonserviced_trees <- tree_map[!tree_map$tree_id %in% serviced_trees$tree_id, ]
+
 # sanity check: 681637 + 29436 = 711037, but there are a lot of repeated entries in the serviced_trees set (trees that were damaged more than once) so this makes sense
 ```
 
@@ -112,16 +113,19 @@ nonserviced_trees_metrics <- nonserviced_trees_metrics %>%
 ```
 
 ```{r}
+# define coordinates as lat/long
 st_crs(nonserviced_trees_metrics) <- 4326  
 ```
 
 #### 7. full list, including repeats –\> 0s and 1s
 
 ```{r}
+# combine datasets
 tree_map_metrics <- rbind(nonserviced_trees_metrics, serviced_trees_metrics)
 ```
 
 ```{r}
+# add 0/1 for no damage / damage
 tree_map_metrics <- tree_map_metrics %>%
   mutate(serviced = as.integer(tree_id %in% serviced_trees_metrics$tree_id))
 ```
@@ -129,8 +133,15 @@ tree_map_metrics <- tree_map_metrics %>%
 #### 8. Clean/remove negative values
 
 ```{r}
+# drop negative values
 tree_map_metrics$height[tree_map_metrics$height < 0] <- NA
 tree_map_metrics$crown_diameter[tree_map_metrics$crown_diameter < 0] <- NA
+```
+
+```{r}
+# save files
+write.csv(nonserviced_trees_metrics, here("01_data", "1e_summary", "nonserviced_trees_metrics.csv"))
+write.csv(tree_map_metrics, here("01_data", "1e_summary", "tree_map_metrics.csv"))
 ```
 
 #### 9. full list without repeats for box plots
@@ -221,4 +232,60 @@ tree_map_gis <- tree_map %>%
 
 ```{r}
 write_csv(tree_map_gis, "tree_map_gis.csv")
+```
+
+Filtering down to approved trees
+
+```{r}
+approved_species <- read.csv("nyc_approved_species.csv")
+```
+
+```{r}
+approved_genus_only <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") == 1] 
+approved_full_species <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") > 1] 
+```
+
+```{r}
+approved_all_genera <- unique(c(
+  approved_genus_only,
+  word(approved_full_species, 1)
+))
+```
+
+```{r}
+tree_map_genera <- tree_map_metrics %>%
+  mutate(genus = word(species_scientific, 1))
+```
+
+```{r}
+trees_approved <- tree_map_genera %>%
+  filter(
+    species_scientific %in% approved_full_species |                          # rule 1: exact species match
+      genus %in% approved_genus_only |                                          # rule 2: whole genus approved
+      (species_scientific == genus & genus %in% approved_all_genera)            # rule 3: genus-only record, genus represented on approved list
+  )
+```
+
+```{r}
+#filtering down to serviced tree species
+serviced_trees_approved <- trees_approved %>%
+  filter(trees_approved$serviced == "1")
+```
+
+```{r}
+# adding NTA names to dataset
+trees_approved <- st_as_sf(trees_approved)
+trees_approved <- st_transform(trees_approved, st_crs(neighborhood_boundaries))
+
+trees_approved <- st_join(trees_approved, neighborhood_boundaries, join = st_within)
+```
+
+```{r}
+trees_approved <- trees_approved %>%
+  select("tree_id", "species_common", "species_scientific", "genus", "stump_diameter", "height", "crown_diameter", "closest_address", "serviced", "ntaname", "geometry")
+```
+
+```{r}
+write.csv(trees_approved, "trees_approved.csv", row.names = FALSE)
+write.csv(serviced_trees_approved, "serviced_trees_approved.csv", row.names = FALSE)
 ```

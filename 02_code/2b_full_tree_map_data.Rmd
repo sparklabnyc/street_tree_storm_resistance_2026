@@ -1,0 +1,280 @@
+---
+title: "2b_full_tree_map_data"
+output: html_document
+date: "2026-07-07"
+---
+
+### Making a full dataset of street trees with metrics for all trees & whether or not they were damaged
+
+#### 1. Make dataset of non-damaged trees
+
+```{r}
+# make dataset of non-serviced trees by filtering out trees in the serviced list
+nonserviced_trees <- tree_map[!tree_map$tree_id %in% serviced_trees$tree_id, ]
+# sanity check: 681637 + 29436 = 711037, but there are a lot of repeated entries in the serviced_trees set (trees that were damaged more than once) so this makes sense
+```
+
+#### 2. Resolve species to prep for getting height/crown width
+
+```{r}
+# extract species names from the nonserviced list
+nonserviced_trees_species <- as.data.frame(table(nonserviced_trees$species_scientific))
+nonserviced_trees_species <- as.character(nonserviced_trees_species$Var1)
+```
+
+```{r}
+# resolve names and get higher taxonomic levels using GBIF
+nonserviced_trees_resolved <- name_backbone_checklist(nonserviced_trees_species)
+```
+
+```{r}
+# filter to necessary columns
+nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
+  select("verbatim_name", "order", "family", "genus")
+
+nonserviced_trees_resolved <- nonserviced_trees_resolved %>%
+  rename(species_scientific = "verbatim_name")
+```
+
+#### 3. Join resolved species names to full tree list in order to run calculations
+
+```{r}
+# match resolved species names to individual nonserviced trees
+nonserviced_trees <- left_join(nonserviced_trees, nonserviced_trees_resolved, by = "species_scientific")
+```
+
+#### 4. Estimate heights w/ DBH
+
+```{r}
+# same calculation process as the serviced trees
+nonserviced_trees_matched_height <- nonserviced_trees %>%
+  left_join(height_species_eqs, by = "species_scientific") %>%
+  left_join(height_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
+  left_join(height_family_eqs, by = "family", suffix = c("", "_family")) %>%
+  left_join(height_order_eqs, by = "order", suffix = c("", "_order")) %>%
+  mutate(
+    model = coalesce(model, model_genus, model_family, model_order),
+    B0    = coalesce(B0, B0_genus, B0_family, B0_order),
+    B1    = coalesce(B1, B1_genus, B1_family, B1_order),
+    B2    = coalesce(B2, B2_genus, B2_family, B2_order)
+  ) %>%
+  select(-ends_with("_genus"), -ends_with("_family"), -ends_with("_order"))
+```
+
+```{r}
+nonserviced_trees_with_height <- nonserviced_trees_matched_height %>%
+  mutate(height = calc_height(stump_diameter, model, B0, B1, B2))
+
+nonserviced_trees_with_height %>%
+  filter(is.na(height)) %>%
+  count(species_scientific, genus, family, order, sort = TRUE)
+```
+
+#### 5. Estimate crown diameter w/ DBH
+
+```{r}
+nonserviced_trees_matched_crown <- nonserviced_trees %>%
+  left_join(crown_species_eqs, by = "species_scientific") %>%
+  left_join(crown_genus_eqs, by = "genus", suffix = c("", "_genus")) %>%
+  left_join(crown_family_eqs, by = "family", suffix = c("", "_family")) %>%
+  left_join(crown_order_eqs, by = "order", suffix = c("", "_order")) %>%
+  mutate(
+    model = coalesce(model, model_genus, model_family, model_order),
+    B0    = coalesce(B0, B0_genus, B0_family, B0_order),
+    B1    = coalesce(B1, B1_genus, B1_family, B1_order),
+    B2    = coalesce(B2, B2_genus, B2_family, B2_order)
+  ) %>%
+  select(-ends_with("_genus"), -ends_with("_family"), -ends_with("_order"))
+```
+
+```{r}
+nonserviced_trees_with_crown <- nonserviced_trees_matched_crown %>%
+  mutate(crown_diameter = calc_crown(stump_diameter, model, B0, B1, B2))
+
+nonserviced_trees_with_crown %>%
+  filter(is.na(crown_diameter)) %>%
+  count(species_scientific, genus, family, order, sort = TRUE)
+```
+
+#### 6. Create combined list of nonserviced trees & metrics
+
+```{r}
+nonserviced_trees_with_height <- nonserviced_trees_with_height %>%
+  select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "closest_address", "geometry")
+
+nonserviced_trees_with_crown <- nonserviced_trees_with_crown %>%
+  select("crown_diameter")
+
+nonserviced_trees_metrics <- cbind(nonserviced_trees_with_height, nonserviced_trees_with_crown)
+
+nonserviced_trees_metrics <- nonserviced_trees_metrics %>%
+    select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "crown_diameter", "closest_address", "geometry")
+```
+
+```{r}
+st_crs(nonserviced_trees_metrics) <- 4326  
+```
+
+#### 7. full list, including repeats –\> 0s and 1s
+
+```{r}
+tree_map_metrics <- rbind(nonserviced_trees_metrics, serviced_trees_metrics)
+```
+
+```{r}
+tree_map_metrics <- tree_map_metrics %>%
+  mutate(serviced = as.integer(tree_id %in% serviced_trees_metrics$tree_id))
+```
+
+#### 8. Clean/remove negative values
+
+```{r}
+tree_map_metrics$height[tree_map_metrics$height < 0] <- NA
+tree_map_metrics$crown_diameter[tree_map_metrics$crown_diameter < 0] <- NA
+```
+
+#### 9. full list without repeats for box plots
+
+```{r}
+tree_map_metrics_clean <- tree_map_metrics %>%
+  distinct(geometry, .keep_all = TRUE)
+```
+
+10. make box plots of height, dbh, and crown diameter
+
+```{r}
+alltreesdbh <- ggplot(tree_map_metrics_clean, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+alltreesdbh
+```
+
+```{r}
+ggplot_build(alltreesdbh)$data[[1]]
+```
+
+```{r}
+servicedtreesdbh <- ggplot(serviced_trees_metrics, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of Serviced Trees DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
+
+servicedtreesdbh
+```
+
+```{r}
+ggplot_build(servicedtreesdbh)$data[[1]]
+```
+
+```{r}
+nonservicedtreesdbh <- ggplot(nonserviced_trees_metrics, aes(x = "", y = stump_diameter)) +
+  geom_boxplot(fill = "steelblue", alpha = 0.7, width = 0.3) +
+  labs(
+    title = "Distribution of Non-serviced Trees DBH",
+    x = "",
+    y = "DBH (inches)"
+  ) +
+  theme_minimal()
+
+nonservicedtreesdbh
+```
+
+```{r}
+ggplot_build(nonservicedtreesdbh)$data[[1]]
+```
+
+saving to plot in arcgis
+
+```{r}
+serviced_trees_gis <- serviced_trees %>%
+  mutate(
+    longitude = st_coordinates(.)[, "X"],
+    latitude = st_coordinates(.)[, "Y"]
+  ) %>%
+  st_drop_geometry()
+```
+
+```{r}
+write_csv(serviced_trees_gis, "serviced_trees_gis.csv")
+```
+
+```{r}
+tree_map_gis <- tree_map %>%
+  mutate(
+    longitude = st_coordinates(.)[, "X"],
+    latitude = st_coordinates(.)[, "Y"]
+  ) %>%
+  st_drop_geometry()
+```
+
+```{r}
+write_csv(tree_map_gis, "tree_map_gis.csv")
+```
+
+Filtering down to approved trees
+
+```{r}
+approved_species <- read.csv("nyc_approved_species.csv")
+```
+
+```{r}
+approved_genus_only <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") == 1] 
+approved_full_species <- approved_species$species_scientific[str_count(approved_species$species_scientific, "\\S+") > 1] 
+```
+
+```{r}
+approved_all_genera <- unique(c(
+  approved_genus_only,
+  word(approved_full_species, 1)
+))
+```
+
+```{r}
+tree_map_genera <- tree_map_metrics %>%
+  mutate(genus = word(species_scientific, 1))
+```
+
+```{r}
+trees_approved <- tree_map_genera %>%
+  filter(
+    species_scientific %in% approved_full_species |                          # rule 1: exact species match
+      genus %in% approved_genus_only |                                          # rule 2: whole genus approved
+      (species_scientific == genus & genus %in% approved_all_genera)            # rule 3: genus-only record, genus represented on approved list
+  )
+```
+
+```{r}
+#filtering down to serviced tree species
+serviced_trees_approved <- trees_approved %>%
+  filter(trees_approved$serviced == "1")
+```
+
+```{r}
+# adding NTA names to dataset
+trees_approved <- st_as_sf(trees_approved)
+trees_approved <- st_transform(trees_approved, st_crs(neighborhood_boundaries))
+
+trees_approved <- st_join(trees_approved, neighborhood_boundaries, join = st_within)
+```
+
+```{r}
+trees_approved <- trees_approved %>%
+  select("tree_id", "species_common", "species_scientific", "genus", "stump_diameter", "height", "crown_diameter", "closest_address", "serviced", "ntaname", "geometry")
+```
+
+```{r}
+write.csv(trees_approved, "trees_approved.csv", row.names = FALSE)
+write.csv(serviced_trees_approved, "serviced_trees_approved.csv", row.names = FALSE)
+```
