@@ -89,7 +89,7 @@ As climate change leads to increased storm hazard severity, the health and struc
 ---
 
 ## Directory Structure
-
+```md
 ├── 01_data
 │   ├── 1a_raw
 │   │   ├── Forestry_Service_Requests_20260609.csv
@@ -129,6 +129,7 @@ As climate change leads to increased storm hazard severity, the health and struc
 ├── 04_sensitivity
 ├── shiny_app (optional)
 ├── README.md
+```
 ---
 
 ## How to Run
