@@ -115,6 +115,22 @@ nonserviced_trees_metrics <- nonserviced_trees_metrics %>%
 st_crs(nonserviced_trees_metrics) <- 4326  
 ```
 
+#### 7. Get borough of all nonserviced trees for PCA later
+
+```{r}
+boroughs <- st_read("https://data.cityofnewyork.us/resource/gthc-hcne.geojson")
+```
+
+```{r}
+nonserviced_trees_metrics <- st_transform(nonserviced_trees_metrics, st_crs(boroughs))  # align CRS first
+nonserviced_trees_metrics <- st_join(nonserviced_trees_metrics, boroughs, join = st_within)
+```
+
+```{r}
+nonserviced_trees_metrics <- nonserviced_trees_metrics %>%
+  rename(borough = boroname)
+```
+
 #### 7. full list, including repeats –\> 0s and 1s
 
 ```{r}

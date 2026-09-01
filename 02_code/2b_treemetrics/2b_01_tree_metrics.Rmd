@@ -42,7 +42,7 @@ Calculate/estimate the height of each tree using I-Tree Tools models
 
 ```{r}
 # calculating the height of each tree
-height_eqs <- read_csv(here("01_data", "1d_support", "height_equations.csv", show_col_types = FALSE))
+height_eqs <- read_csv(here("01_data", "1d_support", "height_equations.csv"))
 ```
 
 ```{r}
@@ -103,7 +103,7 @@ trees_with_height %>%
 Calculating/estimating crown diameter of each tree using I-Tree Tools
 
 ```{r}
-crown_eqs <- read_csv(here("01_data", "1d_support", "crown_equations.csv", show_col_types = FALSE))
+crown_eqs <- read_csv(here("01_data", "1d_support", "crown_equations.csv"))
 ```
 
 ```{r}
@@ -166,7 +166,7 @@ Combine metric data into original serviced trees dataframe
 ```{r}
 # filter to necessary columns
 trees_with_height <- trees_with_height %>%
-  select("tree_id", "species_common", "species_scientific", "tree_condition", "stump_diameter", "height", "borough", "closest_address", "geometry", "service_request_date", "storm_date", "storm_issues")
+  select("tree_id", "species_common", "species_scientific", "tree_condition", "stump_diameter", "height", "borough", "closest_address", "geometry", "service_request_date", "storm_event_id", "storm_date", "storm_issues")
 
 trees_with_crown <- trees_with_crown %>%
   select("crown_diameter")
@@ -175,12 +175,6 @@ trees_with_crown <- trees_with_crown %>%
 ```{r}
 # create full list of serviced trees with height and crown diameter
 serviced_trees_metrics <- cbind(trees_with_height, trees_with_crown)
-```
-
-```{r}
-# filter to match with nonserviced trees since that dataframe contains less information
-serviced_trees_metrics <- serviced_trees_metrics %>%
-    select("tree_id", "species_common", "species_scientific", "stump_diameter", "height", "crown_diameter", "closest_address", "geometry")
 ```
 
 ```{r}

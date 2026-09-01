@@ -22,7 +22,7 @@ storm_service_requests <- hazard_history[service_requests,
 ```{r}
 #select relevant variables
 storm_service_requests <- storm_service_requests %>%
-  select("storm_event_id", "storm_date", "storm_duration", "storm_name", "storm_issues", "daily_total_rainfall", "rainfall_rate", "total_snowfall", "wind_speed", "tree_condition", "borough", "address", "service_request_date", "geometry")
+  select("storm_event_id", "storm_date", "storm_duration", "storm_name", "storm_issues", "tree_condition", "borough", "address", "service_request_date", "geometry")
 ```
 
 #### 2. Join storm service requests with tree map data to get species and size of each serviced tree
@@ -37,7 +37,7 @@ serviced_trees <- st_join(storm_service_requests, tree_map, join = st_nearest_fe
 ```{r}
 #selecting and rearranging relevant columns
 serviced_trees <- serviced_trees %>%
-  select("tree_id", "species_common", "species_scientific", "stump_diameter", "tree_condition", "borough", "closest_address", "geometry", "service_request_date", "storm_date", "storm_event_id", "storm_issues", "daily_total_rainfall", "rainfall_rate", "total_snowfall", "wind_speed")
+  select("tree_id", "species_common", "species_scientific", "stump_diameter", "tree_condition", "borough", "closest_address", "geometry", "service_request_date", "storm_date", "storm_event_id", "storm_issues")
 ```
 
 ```{r}

@@ -1,0 +1,177 @@
+---
+title: "2b_stormdata_pca"
+output: html_document
+date: "2026-08-25"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Principal Component Analysis
+
+Using ML, turning metrics for each storm event (from ERA5) into an intensity number that we can use to control for the effect of storm intensity on tree damage in the regression model.
+
+#### 1. Get PCA1 severity score for each storm
+
+```{r}
+# upload storm data
+storms_era5 <- read_csv(here("01_data", "1a_raw", "nyc_storm_hazards_era5_by_borough.csv"))
+```
+
+```{r}
+# filter down to selected storm events --> just all NYC data for each storm event
+storms_filtered <- storms_era5 %>% 
+  filter(event_id %in% hazard_history$storm_event_id)
+```
+
+```{r}
+# the era5 data includes borough-specific data, but here we filter those rows down to only the affected boroughs of each storm (as reported in boroughs_reported)
+
+storms_byborough <- storms_filtered %>%
+  rowwise() %>%
+  filter(unit %in% str_split(boroughs_reported, ",\\s*")[[1]]) %>%
+  ungroup()
+```
+
+```{r}
+# load library for PCA function
+library(stats)
+```
+
+```{r}
+# run PCA
+storm_metrics <- storms_byborough %>%
+  select(wind_peak_ms, wind_mean_ms, wind_peak_cellmax_ms,
+         precip_total_mm, precip_peak_rate_mmh, precip_peak_rate_cellmax_mmh)
+
+pca_result <- prcomp(storm_metrics, scale. = TRUE, center = TRUE)
+
+summary(pca_result)          # check variance explained by PC1
+pca_result$rotation[, 1]     # check loadings/direction
+```
+
+```{r}
+storms_byborough <- storms_byborough %>%
+  mutate(
+    severity_raw = pca_result$x[, 1],
+    severity_1_10 = scales::rescale(severity_raw, to = c(1, 10))
+  )
+```
+
+```{r}
+storms_byborough <- storms_byborough %>%
+  rename(borough = unit)
+```
+
+```{r}
+storms_byborough <- storms_byborough %>%
+  rename(storm_id = event_id)
+```
+
+```{r}
+serviced_trees_metrics <- serviced_trees_metrics %>%
+  rename(storm_id = storm_event_id)
+```
+
+```{r}
+storms_byborough <- storms_byborough %>%
+  rename(severity = severity_1_10)
+```
+
+#### 2. Join serviced trees with specific severity score
+
+```{r}
+serviced_trees_metrics <- serviced_trees_metrics %>%
+  select(-borough) %>%   # drop the old, mismatched text column
+  st_join(boroughs %>% select(boroname), join = st_within) %>%
+  rename(borough = boroname)   # adjust to your actual boundary column name
+```
+
+```{r}
+serviced_trees_full <- serviced_trees_metrics %>%
+  st_drop_geometry() %>%
+  left_join(storms_byborough %>% select(storm_id, borough, severity), by = c("storm_id", "borough"))
+
+serviced_trees_full <- serviced_trees_full %>%
+  mutate(serviced = 1)
+```
+
+```{r}
+# get closest borough severity for trees w/o borough severity match
+missing_severity <- serviced_trees_full %>%
+  filter(!is.na(borough), is.na(severity))
+
+nrow(missing_severity)
+```
+
+```{r}
+library(purrr)
+
+fill_nearest_borough_severity <- function(tree_row, storms_by_borough, boroughs) {
+  storm <- tree_row$storm_id
+  
+  # boroughs that DO have severity data for this specific storm
+  available_boroughs <- storms_byborough %>%
+    filter(storm_id == storm, !is.na(severity)) %>%
+    pull(borough)
+  
+  if (length(available_boroughs) == 0) return(NA_real_)  # no borough has data for this storm at all
+  
+  # subset the borough polygons to just those available
+  boroughs_available <- boroughs %>% filter(boroname %in% available_boroughs)
+  
+  # find nearest among just those
+  nearest_idx <- st_nearest_feature(tree_row, boroughs_available)
+  nearest_borough <- boroughs_available$boroname[nearest_idx]
+  
+  # pull that borough's severity for this storm
+  storms_by_borough %>%
+    filter(storm_id == storm, borough == nearest_borough) %>%
+    pull(severity) %>%
+    first()
+}
+```
+
+```{r}
+missing_severity <- st_as_sf(missing_severity)
+missing_severity <- st_transform(missing_severity, st_crs(boroughs))
+```
+
+```{r}
+missing_severity$severity <- map_dbl(seq_len(nrow(missing_severity)), function(i) {
+  fill_nearest_borough_severity(missing_severity[i, ], storms_byborough, boroughs)
+})
+```
+
+```{r}
+serviced_trees_full <- serviced_trees_full %>%
+  filter(!(is.na(severity) & !is.na(borough))) %>%   # remove the rows we're about to replace
+  bind_rows(missing_severity)
+
+serviced_trees_full <- serviced_trees_full %>% drop_na(borough)
+```
+
+#### 3. Join nonserviced trees with average borough storm severity score
+
+```{r}
+borough_avg_severity <- storms_byborough %>%
+  group_by(borough) %>%
+  summarize(severity = mean(severity, na.rm = TRUE))
+
+nonserviced_trees_full <- nonserviced_trees_metrics %>%
+  left_join(borough_avg_severity, by = "borough") %>%
+  mutate(serviced = 0)
+```
+
+#### 4. Join datasets together for full treemap data –\> regression
+
+```{r}
+serviced_trees_join <- serviced_trees_full %>%
+  select()
+
+nonserviced_trees_join <- nonserviced_trees_full %>%
+  select()
+
+rbind(serviced_trees_join, nonserviced_trees_join)
+```
